@@ -1,3 +1,1 @@
-NIX
-
 Created project
