@@ -1,3 +1,3 @@
 README.md
 
-Created first project
+Created project
