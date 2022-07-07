@@ -8,7 +8,6 @@ import com.repository.NotebookRepository;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class NotebookService {
@@ -40,39 +39,51 @@ public class NotebookService {
 
     public void printAll() {
         for (Notebook notebook : REPOSITORY.getAll()) {
-            System.out.println(notebook); // TODO: 02/07/22
+            System.out.println(notebook);
         }
     }
 
     public boolean changePrice(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
-            System.out.println("No such id, try again");
+        return REPOSITORY.findById(id).map(notebook -> {
+            LOGGER.info("{}", notebook);
+            notebook.setPrice(RANDOM.nextInt(1000));
+            LOGGER.info("{}", notebook);
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
             return false;
-        }
-        Optional<? extends Notebook> notebook = REPOSITORY.findById(id);
-        System.out.println(notebook.get());
-        notebook.get().setPrice(450);
-        System.out.println(notebook.get());
-        return true;
+        });
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
+        return REPOSITORY.findById(id).map(notebook -> {
+            LOGGER.info("{}", REPOSITORY.getAll());
+            REPOSITORY.delete(id);
+            LOGGER.info("{}, has been deleted", notebook);
+            LOGGER.info("{}", REPOSITORY.getAll());
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
+            return false;
+        });
+    }
+        /*Optional<Notebook> notebook = REPOSITORY.findById(id);
+        if (notebook.isEmpty()) {
             System.out.println("No such id, try again");
             return false;
         }
         System.out.println("Full list before delete");
-        for (Notebook notebook : REPOSITORY.getAll()) {
-            System.out.println(notebook);
+        for (Notebook notebooks : REPOSITORY.getAll()) {
+            System.out.println(notebooks);
         }
         System.out.println();
-        LOGGER.info("Notebook {} has been deleted", REPOSITORY.findById(id).get());
+        LOGGER.info("Notebook {} has been deleted", notebook.get());
         System.out.println();
         System.out.println("List after delete");
         REPOSITORY.delete(id);
-        for (Notebook notebook : REPOSITORY.getAll()) {
-            System.out.println(notebook);
+        for (Notebook notebooks : REPOSITORY.getAll()) {
+            System.out.println(notebooks);
         }
         return true;
-    }
+    }*/
 }
