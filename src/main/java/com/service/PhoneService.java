@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class PhoneService {
@@ -45,34 +44,27 @@ public class PhoneService {
     }
 
     public boolean changePrice(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
-            System.out.println("No such id, try again");
+        return REPOSITORY.findById(id).map(phone -> {
+            LOGGER.info("{}", phone);
+            phone.setPrice(RANDOM.nextInt(1000));
+            LOGGER.info("{}", phone);
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
             return false;
-        }
-        Optional<? extends Phone> phone = REPOSITORY.findById(id);
-        System.out.println(phone.get());
-        phone.get().setPrice(450);
-        System.out.println(phone.get());
-        return true;
+        });
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
-            System.out.println("No such id, try again");
+        return REPOSITORY.findById(id).map(phone -> {
+            LOGGER.info("{}", REPOSITORY.getAll());
+            REPOSITORY.delete(id);
+            LOGGER.info("{}, has been deleted", phone);
+            LOGGER.info("{}", REPOSITORY.getAll());
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
             return false;
-        }
-        System.out.println("Full list before delete");
-        for (Phone phone : REPOSITORY.getAll()) {
-            System.out.println(phone);
-        }
-        System.out.println();
-        LOGGER.info("Phone{} has been deleted", REPOSITORY.findById(id).get());
-        System.out.println();
-        System.out.println("List after delete");
-        REPOSITORY.delete(id);
-        for (Phone phone : REPOSITORY.getAll()) {
-            System.out.println(phone);
-        }
-        return true;
+        });
     }
 }

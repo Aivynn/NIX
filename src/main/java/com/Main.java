@@ -31,12 +31,12 @@ public class Main {
                 case 2:
                     System.out.println("Enter the id of phone you want to change: ");
                     id = scanner.nextLine();
-                    NOTEBOOK_SERVICE.changePrice(id);
+                    PHONE_SERVICE.changePrice(id);
                     break;
                 case 3:
                     System.out.println("Enter the id of smartwatch you want to change: ");
                     id = scanner.nextLine();
-                    NOTEBOOK_SERVICE.changePrice(id);
+                    SMARTWATCH_SERVICE.changePrice(id);
                     break;
                 default:
                     System.out.println("No such product, try again");

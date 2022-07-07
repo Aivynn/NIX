@@ -45,34 +45,27 @@ public class SmartwatchService {
     }
 
     public boolean changePrice(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
-            System.out.println("No such id, try again");
+        return REPOSITORY.findById(id).map(smartwatch -> {
+            LOGGER.info("{}", smartwatch);
+            smartwatch.setPrice(RANDOM.nextInt(1000));
+            LOGGER.info("{}", smartwatch);
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
             return false;
-        }
-        Optional<? extends Smartwatch> smartwatch = REPOSITORY.findById(id);
-        System.out.println(smartwatch.get());
-        smartwatch.get().setPrice(450);
-        System.out.println(smartwatch.get());
-        return true;
+        });
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.findById(id).isEmpty()) {
-            System.out.println("No such id, try again");
+        return REPOSITORY.findById(id).map(smartwatch -> {
+            LOGGER.info("{}", REPOSITORY.getAll());
+            REPOSITORY.delete(id);
+            LOGGER.info("{}, has been deleted", smartwatch);
+            LOGGER.info("{}", REPOSITORY.getAll());
+            return true;
+        }).orElseGet(() -> {
+            LOGGER.info("No such id, try again");
             return false;
-        }
-        System.out.println("Full list before delete");
-        for (Smartwatch smartwatch : REPOSITORY.getAll()) {
-            System.out.println(smartwatch);
-        }
-        System.out.println();
-        LOGGER.info("Smartwatch {} has been deleted", REPOSITORY.findById(id).get());
-        System.out.println();
-        System.out.println("List after delete");
-        REPOSITORY.delete(id);
-        for (Smartwatch smartwatch : REPOSITORY.getAll()) {
-            System.out.println(smartwatch);
-        }
-        return true;
+        });
     }
 }
