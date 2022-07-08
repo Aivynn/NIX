@@ -12,10 +12,19 @@ import java.util.Random;
 
 public class PhoneService {
     private static final Random RANDOM = new Random();
-    private static final PhoneRepository REPOSITORY = new PhoneRepository();
+    private final PhoneRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
+    public PhoneService(PhoneRepository repository) {
+        this.repository = repository;
+
+    }
+
     public void createAndSavePhones(int count) {
+
+        if(count <= 0) {
+            throw new IllegalArgumentException("Count can't be less then zero");
+        }
         List<Phone> phones = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             Phone phone = (new Phone(
@@ -28,7 +37,7 @@ public class PhoneService {
             phones.add(phone);
             LOGGER.info("Phone {} has been created", phone.getId());
         }
-        REPOSITORY.saveAll(phones);
+        repository.saveAll(phones);
     }
 
     private Manufacturer getRandomManufacturer() {
@@ -38,15 +47,16 @@ public class PhoneService {
     }
 
     public void printAll() {
-        for (Phone phone : REPOSITORY.getAll()) {
-            System.out.println(phone); // TODO: 02/07/22
+        for (Phone phone : repository.getAll()) {
+            System.out.println(phone);
         }
     }
 
     public boolean changePrice(String id) {
-        return REPOSITORY.findById(id).map(phone -> {
+        return repository.findById(id).map(phone -> {
             LOGGER.info("{}", phone);
             phone.setPrice(RANDOM.nextInt(1000));
+            repository.update(phone);
             LOGGER.info("{}", phone);
             return true;
         }).orElseGet(() -> {
@@ -56,15 +66,33 @@ public class PhoneService {
     }
 
     public boolean delete(String id) {
-        return REPOSITORY.findById(id).map(phone -> {
-            LOGGER.info("{}", REPOSITORY.getAll());
-            REPOSITORY.delete(id);
+        return repository.findById(id).map(phone -> {
+            LOGGER.info("{}", repository.getAll());
+            repository.delete(id);
             LOGGER.info("{}, has been deleted", phone);
-            LOGGER.info("{}", REPOSITORY.getAll());
+            LOGGER.info("{}", repository.getAll());
             return true;
         }).orElseGet(() -> {
             LOGGER.info("No such id, try again");
             return false;
         });
+    }
+
+    public List<Phone> getAll() {
+        return repository.getAll();
+    }
+
+    public boolean savePhone(Phone phone) {
+        if (phone.getCount() == 0) {
+            phone.setCount(-1);
+        }
+       return repository.update(phone);
+    }
+    public boolean updateTitle(Phone phone,String title) {
+        if(title.length() > 3){
+            phone.setTitle(title);
+           return repository.update(phone);
+        }
+        return false;
     }
 }

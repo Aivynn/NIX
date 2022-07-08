@@ -3,6 +3,9 @@ package com;
 
 import java.util.Scanner;
 
+import com.repository.NotebookRepository;
+import com.repository.PhoneRepository;
+import com.repository.SmartwatchRepository;
 import com.service.NotebookService;
 import com.service.PhoneService;
 import com.service.SmartwatchService;
@@ -10,9 +13,9 @@ import com.service.SmartwatchService;
 
 public class Main {
 
-    private static final PhoneService PHONE_SERVICE = new PhoneService();
-    private static final NotebookService NOTEBOOK_SERVICE = new NotebookService();
-    private static final SmartwatchService SMARTWATCH_SERVICE = new SmartwatchService();
+    private static final PhoneService PHONE_SERVICE = new PhoneService(new PhoneRepository());
+    private static final NotebookService NOTEBOOK_SERVICE = new NotebookService(new NotebookRepository());
+    private static final SmartwatchService SMARTWATCH_SERVICE = new SmartwatchService(new SmartwatchRepository());
 
     public static void main(String[] args) {
         PHONE_SERVICE.createAndSavePhones(5);

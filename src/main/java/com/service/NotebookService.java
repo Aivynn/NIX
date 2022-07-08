@@ -2,9 +2,11 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Notebook;
+import com.model.Phone;
+import com.repository.CrudRepository;
+import com.repository.NotebookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.repository.NotebookRepository;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,9 +15,18 @@ import java.util.Random;
 public class NotebookService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotebookService.class);
     private static final Random RANDOM = new Random();
-    private static final NotebookRepository REPOSITORY = new NotebookRepository();
+    private NotebookRepository repository;
+    
+    public NotebookService(NotebookRepository repository) {
+        this.repository = repository;
+    }
+    
+    
 
     public void createAndSaveNotebooks(int count) {
+        if(count <= 0) {
+            throw new IllegalArgumentException("Count can't be zero or less");
+        }
         List<Notebook> notebooks = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final Notebook notebook = (new Notebook(
@@ -28,7 +39,7 @@ public class NotebookService {
             notebooks.add(notebook);
             LOGGER.info("Notebook {} has been created", notebook.getId());
         }
-        REPOSITORY.saveAll(notebooks);
+        repository.saveAll(notebooks);
     }
 
     private Manufacturer getRandomManufacturer() {
@@ -38,17 +49,17 @@ public class NotebookService {
     }
 
     public void printAll() {
-        for (Notebook notebook : REPOSITORY.getAll()) {
+        for (Notebook notebook : repository.getAll()) {
             System.out.println(notebook);
         }
     }
 
     public boolean changePrice(String id) {
-        return REPOSITORY.findById(id).map(notebook -> {
+        return repository.findById(id).map(notebook -> {
             LOGGER.info("{}", notebook);
             notebook.setPrice(RANDOM.nextInt(1000));
             LOGGER.info("{}", notebook);
-            return true;
+            return repository.update(notebook);
         }).orElseGet(() -> {
             LOGGER.info("No such id, try again");
             return false;
@@ -56,34 +67,25 @@ public class NotebookService {
     }
 
     public boolean delete(String id) {
-        return REPOSITORY.findById(id).map(notebook -> {
-            LOGGER.info("{}", REPOSITORY.getAll());
-            REPOSITORY.delete(id);
+        return repository.findById(id).map(notebook -> {
+            LOGGER.info("{}", repository.getAll());
+            repository.delete(id);
             LOGGER.info("{}, has been deleted", notebook);
-            LOGGER.info("{}", REPOSITORY.getAll());
+            LOGGER.info("{}", repository.getAll());
             return true;
         }).orElseGet(() -> {
             LOGGER.info("No such id, try again");
             return false;
         });
     }
-        /*Optional<Notebook> notebook = REPOSITORY.findById(id);
-        if (notebook.isEmpty()) {
-            System.out.println("No such id, try again");
-            return false;
+
+    public List<Notebook> getAll() {
+        return repository.getAll();
+    }
+    public boolean saveNotebook(Notebook notebook) {
+        if (notebook.getCount() == 0) {
+            notebook.setCount(-1);
         }
-        System.out.println("Full list before delete");
-        for (Notebook notebooks : REPOSITORY.getAll()) {
-            System.out.println(notebooks);
-        }
-        System.out.println();
-        LOGGER.info("Notebook {} has been deleted", notebook.get());
-        System.out.println();
-        System.out.println("List after delete");
-        REPOSITORY.delete(id);
-        for (Notebook notebooks : REPOSITORY.getAll()) {
-            System.out.println(notebooks);
-        }
-        return true;
-    }*/
+        return repository.update(notebook);
+    }
 }

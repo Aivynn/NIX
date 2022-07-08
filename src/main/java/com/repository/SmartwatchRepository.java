@@ -6,32 +6,39 @@ import java.util.*;
 
 public class SmartwatchRepository implements CrudRepository<Smartwatch> {
 
-    private final List<Smartwatch> smartwatches;
+    private final List<Smartwatch> smartwatchs;
 
     public SmartwatchRepository() {
-        smartwatches = new LinkedList<>();
+        smartwatchs = new LinkedList<>();
     }
 
 
     @Override
     public void save(Smartwatch smartwatch) {
-        smartwatches.add(smartwatch);
+        if(smartwatch != null) {
+            smartwatchs.add(smartwatch);
+        } else {
+            throw new IllegalArgumentException("Smartwatch can't be null");
+        }
     }
 
     @Override
     public boolean update(Smartwatch smartwatch) {
+        if(smartwatch == null) {
+            throw new IllegalArgumentException("Smartwatch can't be null");
+        }
         final Optional<Smartwatch> result = findById(smartwatch.getId());
         if (result.isEmpty()) {
             return false;
         }
         final Smartwatch originSmartwatch = result.get();
-        SmartwatchRepository.SmartwatchCopy.copy(smartwatch, originSmartwatch);
+        SmartwatchCopy.copy(smartwatch,originSmartwatch);
         return true;
     }
 
     @Override
     public boolean delete(String id) {
-        final Iterator<Smartwatch> iterator = smartwatches.iterator();
+        final Iterator<Smartwatch> iterator = smartwatchs.iterator();
         while (iterator.hasNext()) {
             final Smartwatch smartwatch = iterator.next();
             if (smartwatch.getId().equals(id)) {
@@ -43,25 +50,31 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
     }
 
     @Override
-    public void saveAll(List<Smartwatch> smartwatches) {
-        for (Smartwatch smartwatch : smartwatches) {
-            save(smartwatch);
+    public void saveAll(List<Smartwatch> products) {
+        for (Smartwatch smartwatch : products) {
+            if(smartwatch != null && findById(smartwatch.getId()).isEmpty()) {
+                save(smartwatch);
+            }
+            else {
+                throw new IllegalArgumentException("Invalid smartwatch to save");
+            }
         }
 
     }
 
+    @Override
     public List<Smartwatch> getAll() {
-        if (smartwatches.isEmpty()) {
+        if (smartwatchs.isEmpty()) {
             return Collections.emptyList();
         }
-        return smartwatches;
+        return smartwatchs;
     }
 
     public Optional<Smartwatch> findById(String id) {
         Smartwatch result = null;
-        for (Smartwatch notebook : smartwatches) {
-            if (notebook.getId().equals(id)) {
-                result = notebook;
+        for (Smartwatch smartwatch : smartwatchs) {
+            if (smartwatch.getId().equals(id)) {
+                result = smartwatch;
             }
         }
         return Optional.ofNullable(result);

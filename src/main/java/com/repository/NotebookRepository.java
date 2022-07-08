@@ -15,17 +15,24 @@ public class NotebookRepository implements CrudRepository<Notebook> {
 
     @Override
     public void save(Notebook notebook) {
-        notebooks.add(notebook);
+        if(notebook != null) {
+            notebooks.add(notebook);
+        } else {
+            throw new IllegalArgumentException("Notebook can't be null");
+        }
     }
 
     @Override
     public boolean update(Notebook notebook) {
+        if(notebook == null) {
+            throw new IllegalArgumentException("Notebook can't be null");
+        }
         final Optional<Notebook> result = findById(notebook.getId());
         if (result.isEmpty()) {
             return false;
         }
         final Notebook originNotebook = result.get();
-        NotebookRepository.NotebookCopy.copy(notebook, originNotebook);
+        NotebookCopy.copy(notebook,originNotebook);
         return true;
     }
 
@@ -43,13 +50,19 @@ public class NotebookRepository implements CrudRepository<Notebook> {
     }
 
     @Override
-    public void saveAll(List<Notebook> notebooks) {
-        for (Notebook notebook : notebooks) {
-            save(notebook);
+    public void saveAll(List<Notebook> products) {
+        for (Notebook notebook : products) {
+            if(notebook != null && findById(notebook.getId()).isEmpty()) {
+                save(notebook);
+            }
+            else {
+                throw new IllegalArgumentException("Invalid notebook to save");
+            }
         }
 
     }
 
+    @Override
     public List<Notebook> getAll() {
         if (notebooks.isEmpty()) {
             return Collections.emptyList();

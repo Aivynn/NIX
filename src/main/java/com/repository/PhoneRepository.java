@@ -15,7 +15,11 @@ public class PhoneRepository implements CrudRepository<Phone> {
 
     @Override
     public void save(Phone phone) {
-        phones.add(phone);
+        if(phone != null) {
+            phones.add(phone);
+        } else {
+            throw new IllegalArgumentException("Phone can't be null");
+        }
     }
 
     @Override
@@ -25,7 +29,7 @@ public class PhoneRepository implements CrudRepository<Phone> {
             return false;
         }
         final Phone originPhone = result.get();
-        PhoneCopy.copy(phone, originPhone);
+        PhoneCopy.copy(phone,originPhone);
         return true;
     }
 
@@ -43,9 +47,14 @@ public class PhoneRepository implements CrudRepository<Phone> {
     }
 
     @Override
-    public void saveAll(List<Phone> product) {
-        for (Phone phone : phones) {
-            save(phone);
+    public void saveAll(List<Phone> products) {
+        for (Phone phone : products) {
+            if(phone != null && findById(phone.getId()).isEmpty()) {
+                save(phone);
+            }
+            else {
+                throw new IllegalArgumentException("Invalid phone to save");
+            }
         }
 
     }
