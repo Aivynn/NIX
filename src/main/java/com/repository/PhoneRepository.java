@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.model.Phone;
+import com.model.Smartwatch;
 
 import java.util.*;
 
@@ -71,6 +72,17 @@ public class PhoneRepository implements CrudRepository<Phone> {
         Phone result = null;
         for (Phone phone : phones) {
             if (phone.getId().equals(id)) {
+                result = phone;
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<Phone> findByTitle(String title) {
+        Phone result = null;
+        for (Phone phone : phones) {
+            if (phone.getTitle().equals(title)) {
                 result = phone;
             }
         }

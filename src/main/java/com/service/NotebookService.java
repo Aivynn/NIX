@@ -12,34 +12,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class NotebookService {
+public class NotebookService extends ProductService<Notebook> {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotebookService.class);
     private static final Random RANDOM = new Random();
     private NotebookRepository repository;
-    
-    public NotebookService(NotebookRepository repository) {
-        this.repository = repository;
-    }
-    
-    
 
-    public void createAndSaveNotebooks(int count) {
-        if(count <= 0) {
-            throw new IllegalArgumentException("Count can't be zero or less");
-        }
-        List<Notebook> notebooks = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
-            final Notebook notebook = (new Notebook(
-                    "Title-" + RANDOM.nextInt(1000),
-                    RANDOM.nextInt(500),
-                    RANDOM.nextInt(1000),
-                    "Model-" + RANDOM.nextInt(10),
-                    getRandomManufacturer()
-            ));
-            notebooks.add(notebook);
-            LOGGER.info("Notebook {} has been created", notebook.getId());
-        }
-        repository.saveAll(notebooks);
+    public NotebookService(NotebookRepository repository) {
+        super(repository);
+        this.repository = repository;
+
+    }
+    @Override
+    protected Notebook createProduct() {
+        return new Notebook(
+                Notebook.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(500),
+                RANDOM.nextDouble(1000.0),
+                "Model-" + RANDOM.nextInt(10),
+                getRandomManufacturer()
+        );
     }
 
     private Manufacturer getRandomManufacturer() {
@@ -57,7 +48,7 @@ public class NotebookService {
     public boolean changePrice(String id) {
         return repository.findById(id).map(notebook -> {
             LOGGER.info("{}", notebook);
-            notebook.setPrice(RANDOM.nextInt(1000));
+            notebook.setPrice((double) RANDOM.nextInt(1000));
             LOGGER.info("{}", notebook);
             return repository.update(notebook);
         }).orElseGet(() -> {
@@ -82,6 +73,7 @@ public class NotebookService {
     public List<Notebook> getAll() {
         return repository.getAll();
     }
+
     public boolean saveNotebook(Notebook notebook) {
         if (notebook.getCount() == 0) {
             notebook.setCount(-1);

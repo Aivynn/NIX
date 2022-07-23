@@ -80,6 +80,17 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public Optional<Smartwatch> findByTitle(String title) {
+        Smartwatch result = null;
+        for (Smartwatch smartwatch : smartwatchs) {
+            if (smartwatch.getTitle().equals(title)) {
+                result = smartwatch;
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
     private static class SmartwatchCopy {
         private static void copy(final Smartwatch from, final Smartwatch to) {
             to.setCount(from.getCount());

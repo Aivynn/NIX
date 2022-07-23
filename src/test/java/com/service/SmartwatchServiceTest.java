@@ -29,17 +29,17 @@ class SmartwatchServiceTest {
 
     @Test
     void createAndSaveSmartwatchs_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSaveSmartwatchs_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSaveSmartwatchs() {
-        target.createAndSaveSmartwatches(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -57,7 +57,7 @@ class SmartwatchServiceTest {
 
     @Test
     void saveSmartwatch() {
-        target.createAndSaveSmartwatches(1);
+        target.createAndSaveProducts(1);
 
         ArgumentCaptor<List<Smartwatch>> argument = ArgumentCaptor.forClass(List.class);
         Mockito.verify(repository).saveAll(argument.capture());
@@ -108,7 +108,7 @@ class SmartwatchServiceTest {
     @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSaveSmartwatches(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Smartwatch>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
@@ -119,7 +119,7 @@ class SmartwatchServiceTest {
     void createAndSaveNotCalled() {
         int count = -5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(count));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
 
     @Test

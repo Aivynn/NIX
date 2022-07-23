@@ -2,6 +2,7 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Phone;
+import com.model.Product;
 import com.repository.PhoneRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,25 +21,28 @@ class PhoneServiceTest {
     private PhoneService target;
     private PhoneRepository repository;
 
+    private OptionalExamples<? extends Product> optionalExamples;
+
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(PhoneRepository.class);
         target = new PhoneService(repository);
+        optionalExamples = new OptionalExamples<Phone>(repository);
     }
 
     @Test
     void createAndSavePhones_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSavePhones_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSavePhones() {
-        target.createAndSavePhones(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -108,7 +112,7 @@ class PhoneServiceTest {
     @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSavePhones(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Phone>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
@@ -119,7 +123,7 @@ class PhoneServiceTest {
     void createAndSaveNotCalled() {
         int count = -5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(count));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
 
     @Test
@@ -157,4 +161,36 @@ class PhoneServiceTest {
         boolean result = target.updateTitle(phone, "asdfg");
         Assertions.assertFalse(result);
     }
+    @Test
+    public void findOrCreate() {
+        String title = "asdfgh";
+        Mockito.when(repository.findByTitle(title)).thenReturn(Optional.of(phone));
+        Product phone1 = optionalExamples.findOrCreate(title);
+
+        Assertions.assertEquals(phone1, phone);
+    }
+
+
+
+
+
+    @Test
+    public void findOrCreateEmpty() {
+        String title = "asdfgh";
+        Mockito.when(repository.findByTitle(title)).thenReturn(Optional.empty());
+        String createdPhoneTitle = target.findOrCreate(title).getTitle();
+
+        Assertions.assertEquals(title,createdPhoneTitle);
+    }
+
+    @Test
+    public void upsertPhoneTitle() {
+        String title = "asdfgh";
+        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
+        target.upsertPhoneTitle(phone.getId(),title).get();
+        ArgumentCaptor<Phone> argumentCaptor = ArgumentCaptor.forClass(Phone.class);
+        Mockito.verify(repository).save(argumentCaptor.capture());
+        Assertions.assertEquals(title,argumentCaptor.getValue().getTitle());
+    }
+
 }
