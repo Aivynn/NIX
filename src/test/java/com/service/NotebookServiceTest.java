@@ -29,17 +29,17 @@ class NotebookServiceTest {
 
     @Test
     void createAndSaveNotebooks_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSaveNotebooks_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSaveNotebooks() {
-        target.createAndSaveNotebooks(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -108,7 +108,7 @@ class NotebookServiceTest {
     @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSaveNotebooks(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Notebook>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
@@ -119,7 +119,7 @@ class NotebookServiceTest {
     void createAndSaveNotCalled() {
         int count = -5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(count));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
 
     @Test

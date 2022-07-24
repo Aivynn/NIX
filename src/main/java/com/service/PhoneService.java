@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.Manufacturer;
+import com.model.Notebook;
 import com.model.Phone;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
@@ -10,34 +11,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class PhoneService {
+public class PhoneService extends ProductService<Phone> {
+
     private static final Random RANDOM = new Random();
     private final PhoneRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     public PhoneService(PhoneRepository repository) {
+        super(repository);
         this.repository = repository;
 
-    }
-
-    public void createAndSavePhones(int count) {
-
-        if(count <= 0) {
-            throw new IllegalArgumentException("Count can't be less then zero");
-        }
-        List<Phone> phones = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
-            Phone phone = (new Phone(
-                    "Title-" + RANDOM.nextInt(1000),
-                    RANDOM.nextInt(500),
-                    RANDOM.nextInt(1000),
-                    "Model-" + RANDOM.nextInt(10),
-                    getRandomManufacturer()
-            ));
-            phones.add(phone);
-            LOGGER.info("Phone {} has been created", phone.getId());
-        }
-        repository.saveAll(phones);
     }
 
     private Manufacturer getRandomManufacturer() {
@@ -55,7 +38,7 @@ public class PhoneService {
     public boolean changePrice(String id) {
         return repository.findById(id).map(phone -> {
             LOGGER.info("{}", phone);
-            phone.setPrice(RANDOM.nextInt(1000));
+            phone.setPrice((double) RANDOM.nextInt(1000));
             repository.update(phone);
             LOGGER.info("{}", phone);
             return true;
@@ -76,6 +59,17 @@ public class PhoneService {
             LOGGER.info("No such id, try again");
             return false;
         });
+    }
+
+    @Override
+    protected Phone createProduct() {
+        return new Phone(
+                Phone.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(500),
+                RANDOM.nextDouble(1000.0),
+                "Model-" + RANDOM.nextInt(10),
+                getRandomManufacturer()
+        );
     }
 
     public List<Phone> getAll() {

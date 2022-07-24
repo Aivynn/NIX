@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Phone extends Product {
+public class Phone extends Product{
     private final String model;
     private final Manufacturer manufacturer;
 
@@ -25,4 +25,5 @@ public class Phone extends Product {
                 ", price=" + price +
                 '}';
     }
+
 }

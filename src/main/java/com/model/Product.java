@@ -10,10 +10,10 @@ import java.util.UUID;
 public abstract class Product {
     protected final String id;
     protected String title;
-    protected int count;
-    protected double price;
+    protected Integer count;
+    protected Double price;
 
-    protected Product(String title, int count, double price) {
+    protected Product(String title, Integer count, Double price) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.count = count;

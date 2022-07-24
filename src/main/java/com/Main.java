@@ -18,11 +18,11 @@ public class Main {
     private static final SmartwatchService SMARTWATCH_SERVICE = new SmartwatchService(new SmartwatchRepository());
 
     public static void main(String[] args) {
-        PHONE_SERVICE.createAndSavePhones(5);
-        NOTEBOOK_SERVICE.createAndSaveNotebooks(5);
-        SMARTWATCH_SERVICE.createAndSaveSmartwatches(5);
-        Scanner scanner = new Scanner(System.in);
+        NOTEBOOK_SERVICE.createAndSaveProducts(5);
+        PHONE_SERVICE.createAndSaveProducts(5);
+        SMARTWATCH_SERVICE.createAndSaveProducts(5);
         System.out.println("Enter the name of product you want to change,1 - Notebook, 2 - Phone, 3 - Smartwatch ");
+        Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
         try {
             switch (Integer.parseInt(name)) {
