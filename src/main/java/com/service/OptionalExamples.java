@@ -23,34 +23,13 @@ public class OptionalExamples{
         this.repository = repository;
     }
 
-    public void isPhoneCheap(String id) {
-        if(repository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("No such id, try again");
-        }
-        double chosenPhone = repository.findById(id).get().getPrice();
-        Phone cheapest = repository.findCheapest().orElseThrow(IllegalArgumentException::new);
-        double price = repository.averagePrice() / repository.size();
-        repository.findById(id)
-                .filter(phone -> phone.getPrice() < price)
-                .ifPresentOrElse(
-                        phone -> {
-                            System.out.println("The average price is " + price);
-                            System.out.println("The chosen phone is cheaper then average price");
-                            System.out.println(phone);
-                        },
-                        () -> {
-                            System.out.println("The average price is " + price);
-                            System.out.println("Phone with id " + id + " isn't cheap." + "His price is " + chosenPhone);
-                            System.out.println("Here is the cheapest one " + cheapest.getId() + "with price " + cheapest.getPrice() );
-                        }
-                );
-    }
+
     public Phone createPhone(String title) {
        return new Phone(title, 100, 956.74, "Model", Manufacturer.APPLE);
     }
 
     public void checkLength(String title) {
-        repository.findByTitle(title).map(phone -> phone.getTitle().length() > 5).orElseThrow(() -> new IllegalArgumentException("Title can't be less then 5 chars"));
+        repository.findByTitle(title).filter(phone -> phone.getTitle().length() > 5).orElseThrow(() -> new IllegalArgumentException("Title can't be less then 5 chars"));
     }
 
     public Phone findOrCreate(String title) {
@@ -60,10 +39,9 @@ public class OptionalExamples{
         return repository.findByTitle(title).orElse(createPhone(title));
     }
 
-    public Optional<Phone> upsertPhoneTitle(String id, String title) {
+    public Optional<Phone> updateOrCreate(String id, String title) {
         return repository.findById(id).map(phone -> {
             phone.setTitle(title);
-            repository.update(phone);
             return phone;
         }).or(() ->
                 java.util.Optional.of(createPhone(title)));
@@ -75,8 +53,13 @@ public class OptionalExamples{
     }
 
     public void changePrice(String id,double price) {
-        repository.findById(id)
-                .ifPresent(phone -> phone.setPrice(price));
+        repository.findById(id).ifPresent(phone -> phone.setPrice(price));
+    }
+
+    public void upsertPhone(Phone phone) {
+        repository.findById(phone.getId())
+                .ifPresentOrElse(repository::update, () -> createPhone(phone.getTitle()));
+
     }
 
 }
