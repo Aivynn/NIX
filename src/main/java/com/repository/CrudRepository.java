@@ -19,4 +19,5 @@ public interface CrudRepository<T extends Product> {
     Optional<T> findById(String id);
 
     Optional<T> findByTitle(String id);
+    
 }

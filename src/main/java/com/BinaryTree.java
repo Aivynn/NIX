@@ -1,6 +1,7 @@
 package com;
 
 import com.model.Product;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Stack;
@@ -11,9 +12,8 @@ public class BinaryTree<T extends Product> {
     private double price = 0.0;
     private int size;
 
-    private Stack<T> treeStack;
-    BinaryTree.Node<T> root;
-    BinaryTree.Node<T> current;
+    private BinaryTree.Node<T> root;
+    private BinaryTree.Node<T> current;
 
     private static class Node<T> {
 
@@ -86,9 +86,42 @@ public class BinaryTree<T extends Product> {
         count(t.right);
         count(t.left);
     }
+    private void count(Stack<Node<T>> stack,Node<T> t) {
+        if (t == null) {
+            return;
+        }
+        stack.add(t);
+        count(stack,t.right);
+        count(stack,t.left);
+    }
 
     public void printNodes() {
-        Stack<T> treeStack = new Stack<>();
-        count(root);
+        Stack<Node<T>> tree = new Stack<>();
+        count(tree,root);
+
+        int left = 20;
+        int n = 3;
+        int right = 40;
+        int i = 1;
+        System.out.println(StringUtils.repeat(" ", 30) + tree.get(0).item.getPrice());
+        while(i<tree.size()) {
+            current = tree.get(i);
+            Node<T> previous = tree.get(i-1);
+            if(tree.get(i).item.getPrice() > root.item.getPrice()) {
+                System.out.println(StringUtils.repeat(" ", right) + tree.get(i).item.getPrice());
+            }
+            else  {
+                if(current.item.getPrice() > previous.item.getPrice()) {
+                    System.out.println(StringUtils.repeat(" ", left + n) + tree.get(i).item.getPrice());
+                }
+                else {
+                    System.out.println(StringUtils.repeat(" ", left-n) + tree.get(i).item.getPrice());
+                }
+                n += 2;
+            }
+
+            i++;
+        }
+
     }
 }

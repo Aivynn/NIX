@@ -13,6 +13,14 @@ public class NotebookRepository implements CrudRepository<Notebook> {
         notebooks = new LinkedList<>();
     }
 
+    private static NotebookRepository instance;
+
+    public static NotebookRepository getInstance() {
+        if (instance == null) {
+            instance = new NotebookRepository();
+        }
+        return instance;
+    }
 
     @Override
     public void save(Notebook notebook) {

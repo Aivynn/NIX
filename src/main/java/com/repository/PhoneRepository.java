@@ -13,6 +13,8 @@ public class PhoneRepository implements CrudRepository<Phone> {
         phones = new LinkedList<>();
     }
 
+    private static PhoneRepository instance;
+
 
     @Override
     public void save(Phone phone) {
@@ -21,6 +23,13 @@ public class PhoneRepository implements CrudRepository<Phone> {
         } else {
             throw new IllegalArgumentException("Phone can't be null");
         }
+    }
+
+    public static PhoneRepository getInstance() {
+        if (instance == null) {
+            instance = new PhoneRepository();
+        }
+        return instance;
     }
 
     @Override

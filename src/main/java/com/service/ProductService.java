@@ -9,14 +9,12 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public abstract class ProductService<T extends Product> {
-    private static final Random RANDOM = new Random();
     private final CrudRepository<T> repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
-    public ProductService(CrudRepository repository) {
+    public ProductService(CrudRepository<T> repository) {
         this.repository = repository;
 
     }
@@ -43,15 +41,10 @@ public abstract class ProductService<T extends Product> {
         }
         repository.save(product);
     }
-    public List<T> getAll() {
-        return repository.getAll();
+    public List<Product> getAll() {
+        return (List<Product>) repository.getAll();
     }
 
-    public void printAll() {
-        for (T phone : repository.getAll()) {
-            System.out.println(phone);
-        }
-    }
 
     public T findOrCreate(String title) {
         if(title.length() < 5) {
@@ -67,5 +60,17 @@ public abstract class ProductService<T extends Product> {
         }).or(() ->
                 java.util.Optional.of(createProduct()));
     }
+    public void printAll() {
+        for (T phone : repository.getAll()) {
+            System.out.println(phone);
+        }
+    }
+
+    public void delete(String id) {
+        repository.delete(id);
+        LOGGER.info("Product {} has been updated", id);
+    }
+
+    public abstract void update(T t,double price);
 
 }

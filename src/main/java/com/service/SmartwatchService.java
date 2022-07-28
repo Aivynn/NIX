@@ -4,6 +4,7 @@ import com.model.Manufacturer;
 import com.model.Notebook;
 import com.model.Phone;
 import com.model.Smartwatch;
+import com.repository.PhoneRepository;
 import com.repository.SmartwatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +18,19 @@ public class SmartwatchService extends ProductService<Smartwatch> {
     private static final Random RANDOM = new Random();
     private SmartwatchRepository repository;
 
+    private static SmartwatchService instance;
+
     public SmartwatchService(SmartwatchRepository repository) {
         super(repository);
         this.repository = repository;
     }
 
-
+    public static SmartwatchService getInstance() {
+        if (instance == null) {
+            instance = new SmartwatchService(SmartwatchRepository.getInstance());
+        }
+        return instance;
+    }
 
 
     private Manufacturer getRandomManufacturer() {
@@ -30,13 +38,6 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
-
-    public void printAll() {
-        for (Smartwatch smartwatch : repository.getAll()) {
-            System.out.println(smartwatch);
-        }
-    }
-
     public boolean changePrice(String id) {
         return repository.findById(id).map(smartwatch -> {
             LOGGER.info("{}", smartwatch);
@@ -49,18 +50,6 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         });
     }
 
-    public boolean delete(String id) {
-        return repository.findById(id).map(smartwatch -> {
-            LOGGER.info("{}", repository.getAll());
-            repository.delete(id);
-            LOGGER.info("{}, has been deleted", smartwatch);
-            LOGGER.info("{}", repository.getAll());
-            return true;
-        }).orElseGet(() -> {
-            LOGGER.info("No such id, try again");
-            return false;
-        });
-    }
 
     @Override
     protected Smartwatch createProduct() {
@@ -73,13 +62,22 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         );
     }
 
-    public List<Smartwatch> getAll() {
-        return repository.getAll();
+    @Override
+    public void update(Smartwatch smartwatch, double price) {
+        smartwatch.setPrice(price);
+        repository.update(smartwatch);
+        LOGGER.info("Notebook {} has been deleted", smartwatch.getId());
     }
+
     public boolean saveSmartwatch(Smartwatch smartwatch) {
         if (smartwatch.getCount() == 0) {
             smartwatch.setCount(-1);
         }
         return repository.update(smartwatch);
+    }
+    public void updateSmartwatch(Smartwatch phone, double price) {
+        phone.setPrice(price);
+        repository.update(phone);
+        LOGGER.info("Phone {} has been deleted", phone.getId());
     }
 }
