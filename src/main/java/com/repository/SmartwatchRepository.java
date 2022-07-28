@@ -12,10 +12,19 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
         smartwatchs = new LinkedList<>();
     }
 
+    private static SmartwatchRepository instance;
+
+
+    public static SmartwatchRepository getInstance() {
+        if (instance == null) {
+            instance = new SmartwatchRepository();
+        }
+        return instance;
+    }
 
     @Override
     public void save(Smartwatch smartwatch) {
-        if(smartwatch != null) {
+        if (smartwatch != null) {
             smartwatchs.add(smartwatch);
         } else {
             throw new IllegalArgumentException("Smartwatch can't be null");
@@ -24,7 +33,7 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
 
     @Override
     public boolean update(Smartwatch smartwatch) {
-        if(smartwatch == null) {
+        if (smartwatch == null) {
             throw new IllegalArgumentException("Smartwatch can't be null");
         }
         final Optional<Smartwatch> result = findById(smartwatch.getId());
@@ -32,7 +41,7 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
             return false;
         }
         final Smartwatch originSmartwatch = result.get();
-        SmartwatchCopy.copy(smartwatch,originSmartwatch);
+        SmartwatchCopy.copy(smartwatch, originSmartwatch);
         return true;
     }
 
@@ -52,10 +61,9 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
     @Override
     public void saveAll(List<Smartwatch> products) {
         for (Smartwatch smartwatch : products) {
-            if(smartwatch != null && findById(smartwatch.getId()).isEmpty()) {
+            if (smartwatch != null && findById(smartwatch.getId()).isEmpty()) {
                 save(smartwatch);
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException("Invalid smartwatch to save");
             }
         }
@@ -74,6 +82,17 @@ public class SmartwatchRepository implements CrudRepository<Smartwatch> {
         Smartwatch result = null;
         for (Smartwatch smartwatch : smartwatchs) {
             if (smartwatch.getId().equals(id)) {
+                result = smartwatch;
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<Smartwatch> findByTitle(String title) {
+        Smartwatch result = null;
+        for (Smartwatch smartwatch : smartwatchs) {
+            if (smartwatch.getTitle().equals(title)) {
                 result = smartwatch;
             }
         }
