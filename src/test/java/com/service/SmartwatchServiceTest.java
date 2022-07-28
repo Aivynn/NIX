@@ -29,17 +29,17 @@ class SmartwatchServiceTest {
 
     @Test
     void createAndSaveSmartwatchs_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSaveSmartwatchs_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSaveSmartwatchs() {
-        target.createAndSaveSmartwatches(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -56,26 +56,6 @@ class SmartwatchServiceTest {
     }
 
     @Test
-    void saveSmartwatch() {
-        target.createAndSaveSmartwatches(1);
-
-        ArgumentCaptor<List<Smartwatch>> argument = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(repository).saveAll(argument.capture());
-        Assertions.assertTrue(argument.getValue().get(0).getTitle().contains("Title"), "Title");
-    }
-
-    @Test
-    void saveSmartwatch_zeroCount() {
-        smartwatch.setCount(0);
-        target.saveSmartwatch(smartwatch);
-
-        ArgumentCaptor<Smartwatch> argument = ArgumentCaptor.forClass(Smartwatch.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
-
-    @Test
     void changePrice() {
         double previousPrice = smartwatch.getPrice();
         Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
@@ -83,52 +63,13 @@ class SmartwatchServiceTest {
         Mockito.verify(repository).update(smartwatch);
         Assertions.assertNotEquals(previousPrice, smartwatch.getPrice());
     }
-
-    @Test
-    void delete() {
-        Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
-
-        boolean delete = target.delete(smartwatch.getId());
-
-        Mockito.verify(repository).findById(smartwatch.getId());
-        Mockito.verify(repository).delete(smartwatch.getId());
-        Assertions.assertTrue(delete);
-    }
-
-    @Test
-    void deleteWhenIdIsNotPresent() {
-        Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-        boolean delete = target.delete(smartwatch.getId());
-
-        Mockito.verify(repository).findById(smartwatch.getId());
-        Mockito.verify(repository, times(0)).delete(smartwatch.getId());
-        Assertions.assertFalse(delete);
-    }
-
     @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSaveSmartwatches(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Smartwatch>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
         Assertions.assertEquals(count, argumentCaptor.getValue().size());
     }
-
-    @Test
-    void createAndSaveNotCalled() {
-        int count = -5;
-
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveSmartwatches(count));
-    }
-
-    @Test
-    void isIdValid() {
-        Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
-        boolean delete = target.delete(smartwatch.getId());
-        verify(repository).delete(isA(String.class));
-        Assertions.assertTrue(delete);
-    }
-
-
 }

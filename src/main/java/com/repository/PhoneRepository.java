@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.model.Phone;
+import com.model.Smartwatch;
 
 import java.util.*;
 
@@ -12,6 +13,8 @@ public class PhoneRepository implements CrudRepository<Phone> {
         phones = new LinkedList<>();
     }
 
+    private static PhoneRepository instance;
+
 
     @Override
     public void save(Phone phone) {
@@ -20,6 +23,13 @@ public class PhoneRepository implements CrudRepository<Phone> {
         } else {
             throw new IllegalArgumentException("Phone can't be null");
         }
+    }
+
+    public static PhoneRepository getInstance() {
+        if (instance == null) {
+            instance = new PhoneRepository();
+        }
+        return instance;
     }
 
     @Override
@@ -71,6 +81,17 @@ public class PhoneRepository implements CrudRepository<Phone> {
         Phone result = null;
         for (Phone phone : phones) {
             if (phone.getId().equals(id)) {
+                result = phone;
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<Phone> findByTitle(String title) {
+        Phone result = null;
+        for (Phone phone : phones) {
+            if (phone.getTitle().equals(title)) {
                 result = phone;
             }
         }

@@ -1,12 +1,15 @@
 package com.repository;
 
 import com.model.Manufacturer;
+import com.model.OperationSystem;
 import com.model.Phone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 class PhoneRepositoryTest {
 
@@ -23,7 +26,10 @@ class PhoneRepositoryTest {
                 random.nextInt(500),
                 random.nextInt(1000),
                 "Model-" + random.nextInt(10),
-                Manufacturer.APPLE
+                Manufacturer.APPLE,
+                Stream.of("foo", "bar").toList(),
+                new OperationSystem(11,"Android"),
+                LocalDateTime.now()
         );
     }
 
@@ -59,7 +65,9 @@ class PhoneRepositoryTest {
 
     @Test
     void saveAll_manyPhones() {
-        final Phone otherPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Phone otherPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE,
+                Stream.of("foo", "bar").toList(),new OperationSystem(11,"Android"),
+                LocalDateTime.now());
         target.saveAll(List.of(phone, otherPhone));
         final List<Phone> phones = target.getAll();
         Assertions.assertEquals(2, phones.size());
@@ -104,7 +112,9 @@ class PhoneRepositoryTest {
     @Test
     void update_noPhone() {
         target.save(phone);
-        final Phone noPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Phone noPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE,
+                Stream.of("foo", "bar").toList(),new OperationSystem(11,"Android"),
+                LocalDateTime.now());
         final boolean result = target.update(noPhone);
 
         Assertions.assertFalse(result);
@@ -126,7 +136,9 @@ class PhoneRepositoryTest {
     @Test
     void delete_noPhone() {
         target.save(phone);
-        final Phone noPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Phone noPhone = new Phone("Title", 500, 1000.0, "Model", Manufacturer.APPLE,
+                Stream.of("foo", "bar").toList(),new OperationSystem(11,"Android"),
+                LocalDateTime.now());
         final boolean result = target.delete(noPhone.getId());
         Assertions.assertFalse(result);
         final List<Phone> actualResult = target.getAll();
@@ -153,9 +165,5 @@ class PhoneRepositoryTest {
         Assertions.assertTrue(optionalPhone.isPresent());
         final Phone actualPhone = optionalPhone.get();
         Assertions.assertEquals(phone.getId(),actualPhone.getId());
-    }
-    @Test
-    void updateNull() {
-        Assertions.assertThrows(IllegalArgumentException.class,() -> target.update(null));
     }
 }
