@@ -11,13 +11,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
 public class OptionalExamplesTest {
 
-    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE);
+    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE,Stream.of("foo", "bar")
+            .collect(Collectors.toList()));
     private PhoneRepository repository;
 
     private OptionalExamples target;
@@ -95,7 +98,8 @@ public class OptionalExamplesTest {
 
     @Test
     public void upsertPhone() {
-        Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE);
+        Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE, Stream.of("foo", "bar")
+                .collect(Collectors.toList()));
         Mockito.when(repository.findById(test.getId())).thenReturn(Optional.of(test));
         target.upsertPhone(test);
         Mockito.verify(repository).update(test);
@@ -103,7 +107,8 @@ public class OptionalExamplesTest {
 
     @Test
     public void upsertPhoneNotFound() {
-        Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE);
+        Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE,Stream.of("foo", "bar")
+                .collect(Collectors.toList()));
         Mockito.when(repository.findById(test.getId())).thenReturn(Optional.empty());
         target.upsertPhone(test);
         Mockito.verify(repository,times(0)).update(any(Phone.class));
