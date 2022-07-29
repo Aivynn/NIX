@@ -12,6 +12,8 @@ public class BinaryTree<T extends Product> {
     private double price = 0.0;
     private int size;
 
+    private int nodeDepth = 1;
+
     private BinaryTree.Node<T> root;
     private BinaryTree.Node<T> current;
 
@@ -24,12 +26,15 @@ public class BinaryTree<T extends Product> {
         LocalDateTime time;
         int version;
 
-        Node(BinaryTree.Node<T> left, Product element, BinaryTree.Node<T> right, LocalDateTime time, int version) {
+        int depth;
+
+        Node(BinaryTree.Node<T> left, Product element, BinaryTree.Node<T> right, LocalDateTime time, int version,int depth) {
             this.item = element;
             this.left = right;
             this.right = left;
             this.time = time;
             this.version = version;
+            this.depth = depth;
         }
     }
 
@@ -37,30 +42,34 @@ public class BinaryTree<T extends Product> {
         LocalDateTime time = LocalDateTime.now();
         ProductComporator comporator = new ProductComporator();
         if (root == null) {
-            root = new Node<>(null, e, null, time, version);
+            root = new Node<>(null, e, null, time, version,0);
             current = root;
             size++;
             return;
         }
         if (comporator.compare(e, current.item) > 0) {
             if (current.right == null) {
-                current.right = new Node<>(null, e, null, time, version);
+                current.right = new Node<>(null, e, null, time, version,nodeDepth);
                 size++;
                 current = root;
+                nodeDepth = 1;
                 return;
             } else {
                 current = current.right;
+                nodeDepth++;
                 add(e, version);
             }
 
         } else {
             if (current.left == null) {
-                current.left = new Node<>(null, e, null, time, version);
+                current.left = new Node<>(null, e, null, time, version,nodeDepth);
                 current = root;
                 size++;
+                nodeDepth = 1;
                 return;
             } else {
                 current = current.left;
+                nodeDepth++;
                 add(e, version);
             }
         }
@@ -86,6 +95,7 @@ public class BinaryTree<T extends Product> {
         count(t.right);
         count(t.left);
     }
+
     private void count(Stack<Node<T>> stack,Node<T> t) {
         if (t == null) {
             return;
@@ -99,33 +109,30 @@ public class BinaryTree<T extends Product> {
         Stack<Node<T>> tree = new Stack<>();
         count(tree,root);
 
-        int left = 20;
-        int n = 3;
-        int right = 40;
-        int i = 1;
-        System.out.println(StringUtils.repeat(" ", 30) + tree.get(0).item.getPrice());
-        while(i<tree.size()) {
-            current = tree.get(i);
-            Node<T> previous = tree.get(i-1);
-            if(tree.get(i).item.getPrice() > root.item.getPrice()) {
-                if(current.item.getPrice() > previous.item.getPrice()) {
-                    System.out.println(StringUtils.repeat(" ", right + n) + tree.get(i).item.getPrice());
-                }
-                else {
-                    System.out.println(StringUtils.repeat(" ", right-n) + tree.get(i).item.getPrice());
-                }
+        int height = 10;
+        int n = 0;
+        int right = 15;
+        int maxDepth = 0;
+        int currentDepth = 0;
+
+        for(int i = 0;i<tree.size();i++) {
+            if(tree.get(i).depth > maxDepth) {
+                maxDepth = tree.get(i).depth;
             }
-            else  {
-                if(current.item.getPrice() > previous.item.getPrice()) {
-                    System.out.println(StringUtils.repeat(" ", left + n) + tree.get(i).item.getPrice());
-                }
-                else {
-                    System.out.println(StringUtils.repeat(" ", left-n) + tree.get(i).item.getPrice());
-                }
-            }
-            n += 2;
-            i++;
         }
 
+        System.out.print(StringUtils.repeat(" ", height+5) + root.item.getPrice());
+        while (currentDepth < maxDepth) {
+            System.out.print(StringUtils.repeat(" ", height));
+            for(int i = tree.size() - 1;i>0;i--) {
+                if(currentDepth == tree.get(i).depth) {
+                    System.out.print(tree.get(i).item.getPrice() + StringUtils.repeat(" ", right));
+                }
+            }
+            height -= 3;
+            right -= 2;
+            System.out.println();
+            currentDepth++;
+        }
     }
 }
