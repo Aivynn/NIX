@@ -56,26 +56,6 @@ class NotebookServiceTest {
     }
 
     @Test
-    void saveNotebook() {
-        target.saveNotebook(notebook);
-
-        ArgumentCaptor<Notebook> argument = ArgumentCaptor.forClass(Notebook.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-    }
-
-    @Test
-    void saveNotebook_zeroCount() {
-        notebook.setCount(0);
-        target.saveNotebook(notebook);
-
-        ArgumentCaptor<Notebook> argument = ArgumentCaptor.forClass(Notebook.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
-
-    @Test
     void changePrice() {
         double previousPrice = notebook.getPrice();
         Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));

@@ -64,16 +64,6 @@ class SmartwatchServiceTest {
         Assertions.assertTrue(argument.getValue().get(0).getTitle().contains("Title"), "Title");
     }
 
-    @Test
-    void saveSmartwatch_zeroCount() {
-        smartwatch.setCount(0);
-        target.saveSmartwatch(smartwatch);
-
-        ArgumentCaptor<Smartwatch> argument = ArgumentCaptor.forClass(Smartwatch.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
 
     @Test
     void changePrice() {
@@ -110,4 +100,4 @@ class SmartwatchServiceTest {
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
         Assertions.assertEquals(count, argumentCaptor.getValue().size());
     }
-    }
+}

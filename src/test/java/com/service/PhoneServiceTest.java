@@ -10,14 +10,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class PhoneServiceTest {
-    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE);
+
+    final  List<String> list = Stream.of("foo", "bar")
+            .collect(Collectors.toList());
+    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE,list);
     private PhoneService target;
     private PhoneRepository repository;
 
@@ -54,27 +60,6 @@ class PhoneServiceTest {
     void printAll() {
         target.printAll();
         Mockito.verify(repository).getAll();
-    }
-
-    @Test
-    void updatePhone() {
-        final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE);
-        target.savePhone(phone);
-
-        ArgumentCaptor<Phone> argument = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-    }
-
-    @Test
-    void savePhone_zeroCount() {
-        phone.setCount(0);
-        target.savePhone(phone);
-
-        ArgumentCaptor<Phone> argument = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
     }
 
     @Test

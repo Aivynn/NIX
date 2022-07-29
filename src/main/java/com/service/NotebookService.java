@@ -68,11 +68,4 @@ public class NotebookService extends ProductService<Notebook> {
             return false;
         });
     }
-
-    public boolean saveNotebook(Notebook notebook) {
-        if (notebook.getCount() == 0) {
-            notebook.setCount(-1);
-        }
-        return repository.update(notebook);
-    }
 }

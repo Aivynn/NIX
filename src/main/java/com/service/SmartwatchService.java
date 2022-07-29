@@ -68,16 +68,4 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         repository.update(smartwatch);
         LOGGER.info("Notebook {} has been deleted", smartwatch.getId());
     }
-
-    public boolean saveSmartwatch(Smartwatch smartwatch) {
-        if (smartwatch.getCount() == 0) {
-            smartwatch.setCount(-1);
-        }
-        return repository.update(smartwatch);
-    }
-    public void updateSmartwatch(Smartwatch phone, double price) {
-        phone.setPrice(price);
-        repository.update(phone);
-        LOGGER.info("Phone {} has been deleted", phone.getId());
-    }
 }

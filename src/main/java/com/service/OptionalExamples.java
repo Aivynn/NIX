@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OptionalExamples{
 
@@ -25,7 +27,8 @@ public class OptionalExamples{
 
 
     public Phone createPhone(String title) {
-       return new Phone(title, 100, 956.74, "Model", Manufacturer.APPLE);
+       return new Phone(title, 100, 956.74, "Model", Manufacturer.APPLE, Stream.of("foo", "bar")
+               .collect(Collectors.toList()));
     }
 
     public void checkLength(String title) {

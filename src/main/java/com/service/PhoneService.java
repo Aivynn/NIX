@@ -1,16 +1,15 @@
 package com.service;
 
 import com.model.Manufacturer;
-import com.model.Notebook;
 import com.model.Phone;
 import com.model.Product;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PhoneService extends ProductService<Phone> {
 
@@ -59,7 +58,9 @@ public class PhoneService extends ProductService<Phone> {
                 RANDOM.nextInt(500),
                 RANDOM.nextDouble(1000.0),
                 "Model-" + RANDOM.nextInt(10),
-                getRandomManufacturer()
+                getRandomManufacturer(),
+                Stream.of("foo", "bar")
+                        .collect(Collectors.toList())
         );
     }
 
@@ -70,13 +71,6 @@ public class PhoneService extends ProductService<Phone> {
         LOGGER.info("Notebook {} has been updated", phone.getId());
     }
 
-    public boolean savePhone(Phone phone) {
-        if (phone.getCount() == 0) {
-            phone.setCount(-1);
-        }
-        return repository.update(phone);
-    }
-
     public boolean updateTitle(Phone phone, String title) {
         if (title.length() > 3) {
             phone.setTitle(title);
@@ -85,9 +79,32 @@ public class PhoneService extends ProductService<Phone> {
         return false;
     }
 
-    public void updatePhone(Phone phone, double price) {
-        phone.setPrice(price);
-        repository.update(phone);
-        LOGGER.info("Phone {} has been deleted", phone.getId());
+    public void expensivePhone(double price) {
+        repository.getAll().stream()
+                .filter(phone -> price > phone.getPrice())
+                .forEach(phone -> System.out.println(phone.getTitle()));
+    }
+
+    public void allPhonePrices() {
+       Double price = repository.getAll().stream().mapToDouble(Product::getPrice).sum();
+       System.out.println(price);
+    }
+
+    public void sortByTitle() {
+        List<Phone> phones = repository.getAll().stream().sorted().toList();
+        HashMap<String, String> map = (HashMap<String, String>) phones.stream()
+                .collect(Collectors.toMap(Phone::getId,Phone::getTitle));
+    }
+    public void allPrices() {
+        repository.getAll()
+                .forEach(phone -> System.out.println(phone.getPrice()));
+    }
+
+    public Optional<Boolean> findAny(String detail) {
+        return repository.getAll()
+                .stream()
+                .flatMap(phone -> phone.getDetails().stream().map(s -> Objects.equals(s, detail)))
+                .findAny();
+
     }
 }
