@@ -108,7 +108,12 @@ public class BinaryTree<T extends Product> {
             current = tree.get(i);
             Node<T> previous = tree.get(i-1);
             if(tree.get(i).item.getPrice() > root.item.getPrice()) {
-                System.out.println(StringUtils.repeat(" ", right) + tree.get(i).item.getPrice());
+                if(current.item.getPrice() > previous.item.getPrice()) {
+                    System.out.println(StringUtils.repeat(" ", right + n) + tree.get(i).item.getPrice());
+                }
+                else {
+                    System.out.println(StringUtils.repeat(" ", right-n) + tree.get(i).item.getPrice());
+                }
             }
             else  {
                 if(current.item.getPrice() > previous.item.getPrice()) {
