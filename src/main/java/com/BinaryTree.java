@@ -122,9 +122,8 @@ public class BinaryTree<T extends Product> {
                 else {
                     System.out.println(StringUtils.repeat(" ", left-n) + tree.get(i).item.getPrice());
                 }
-                n += 2;
             }
-
+            n += 2;
             i++;
         }
 

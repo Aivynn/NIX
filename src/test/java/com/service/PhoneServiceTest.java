@@ -21,13 +21,11 @@ class PhoneServiceTest {
     private PhoneService target;
     private PhoneRepository repository;
 
-    private OptionalExamples<? extends Product> optionalExamples;
 
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(PhoneRepository.class);
         target = new PhoneService(repository);
-        optionalExamples = new OptionalExamples<Phone>(repository);
     }
 
     @Test
@@ -92,22 +90,10 @@ class PhoneServiceTest {
     void delete() {
         Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
 
-        boolean delete = target.delete(phone.getId());
-
         Mockito.verify(repository).findById(phone.getId());
         Mockito.verify(repository).delete(phone.getId());
-        Assertions.assertTrue(delete);
     }
 
-    @Test
-    void deleteWhenIdIsNotPresent() { ;
-        Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-        boolean delete = target.delete(phone.getId());
-
-        Mockito.verify(repository).findById(phone.getId());
-        Mockito.verify(repository, times(0)).delete(phone.getId());
-        Assertions.assertFalse(delete);
-    }
 
     @Test
     void createAndSave() {
@@ -128,10 +114,8 @@ class PhoneServiceTest {
 
     @Test
     void isIdValid() {
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-        boolean delete = target.delete(phone.getId());
+        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));;
         verify(repository).delete(isA(String.class));
-        Assertions.assertTrue(delete);
     }
 
     @Test
@@ -161,36 +145,4 @@ class PhoneServiceTest {
         boolean result = target.updateTitle(phone, "asdfg");
         Assertions.assertFalse(result);
     }
-    @Test
-    public void findOrCreate() {
-        String title = "asdfgh";
-        Mockito.when(repository.findByTitle(title)).thenReturn(Optional.of(phone));
-        Product phone1 = optionalExamples.findOrCreate(title);
-
-        Assertions.assertEquals(phone1, phone);
-    }
-
-
-
-
-
-    @Test
-    public void findOrCreateEmpty() {
-        String title = "asdfgh";
-        Mockito.when(repository.findByTitle(title)).thenReturn(Optional.empty());
-        String createdPhoneTitle = target.findOrCreate(title).getTitle();
-
-        Assertions.assertEquals(title,createdPhoneTitle);
-    }
-
-    @Test
-    public void upsertPhoneTitle() {
-        String title = "asdfgh";
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-        target.upsertPhoneTitle(phone.getId(),title).get();
-        ArgumentCaptor<Phone> argumentCaptor = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).save(argumentCaptor.capture());
-        Assertions.assertEquals(title,argumentCaptor.getValue().getTitle());
-    }
-
 }

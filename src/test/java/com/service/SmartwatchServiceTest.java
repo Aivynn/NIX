@@ -88,21 +88,17 @@ class SmartwatchServiceTest {
     void delete() {
         Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
 
-        boolean delete = target.delete(smartwatch.getId());
 
         Mockito.verify(repository).findById(smartwatch.getId());
         Mockito.verify(repository).delete(smartwatch.getId());
-        Assertions.assertTrue(delete);
     }
 
     @Test
     void deleteWhenIdIsNotPresent() {
         Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-        boolean delete = target.delete(smartwatch.getId());
 
         Mockito.verify(repository).findById(smartwatch.getId());
         Mockito.verify(repository, times(0)).delete(smartwatch.getId());
-        Assertions.assertFalse(delete);
     }
 
     @Test
@@ -114,21 +110,4 @@ class SmartwatchServiceTest {
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
         Assertions.assertEquals(count, argumentCaptor.getValue().size());
     }
-
-    @Test
-    void createAndSaveNotCalled() {
-        int count = -5;
-
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
-
-    @Test
-    void isIdValid() {
-        Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
-        boolean delete = target.delete(smartwatch.getId());
-        verify(repository).delete(isA(String.class));
-        Assertions.assertTrue(delete);
-    }
-
-
-}
