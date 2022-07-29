@@ -45,6 +45,11 @@ public class NotebookService extends ProductService<Notebook> {
     }
 
     @Override
+    public Notebook createFromObject(Notebook notebook) {
+        return null;
+    }
+
+    @Override
     public void update(Notebook notebook, double price) {
         notebook.setPrice(price);
         repository.update(notebook);

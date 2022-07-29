@@ -10,11 +10,10 @@ import java.util.List;
 public class Phone extends Product{
     private final String model;
     private final Manufacturer manufacturer;
-
     private List<String> details;
 
     public Phone(String title, int count, double price, String model, Manufacturer manufacturer,List<String> details) {
-        super(title, count, price);
+        super(title, count, price,ProductType.PHONE);
         this.model = model;
         this.details = details;
         this.manufacturer = manufacturer;

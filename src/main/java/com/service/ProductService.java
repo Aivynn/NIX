@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.Phone;
+
 import com.model.Product;
 import com.repository.CrudRepository;
 import org.slf4j.Logger;
@@ -70,6 +70,8 @@ public abstract class ProductService<T extends Product> {
         repository.delete(id);
         LOGGER.info("Product {} has been updated", id);
     }
+
+    public abstract T createFromObject(T t);
 
     public abstract void update(T t,double price);
 

@@ -3,11 +3,14 @@ package com.service;
 import com.model.Manufacturer;
 import com.model.Phone;
 import com.model.Product;
+import com.model.ProductType;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,6 +68,11 @@ public class PhoneService extends ProductService<Phone> {
     }
 
     @Override
+    public Phone createFromObject(Phone phone) {
+        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(),phone.getDetails());
+    }
+
+    @Override
     public void update(Phone phone,double price) {
         phone.setPrice(price);
         repository.update(phone);
@@ -90,10 +98,10 @@ public class PhoneService extends ProductService<Phone> {
        System.out.println(price);
     }
 
-    public void sortByTitle() {
-        List<Phone> phones = repository.getAll().stream().sorted().toList();
-        HashMap<String, String> map = (HashMap<String, String>) phones.stream()
-                .collect(Collectors.toMap(Phone::getId,Phone::getTitle));
+    public Map<String, ProductType> sortByTitle() {
+        return repository.getAll().stream()
+                .sorted(Comparator.comparing(Product::getTitle)).distinct()
+                .collect(Collectors.toMap(Product::getId,Product::getType));
     }
     public void allPrices() {
         repository.getAll()
@@ -107,4 +115,9 @@ public class PhoneService extends ProductService<Phone> {
                 .findAny();
 
     }
+
+    public Predicate<Collection<Phone>> hasPrice = (phone -> phone.stream().map(Phone::getPrice).anyMatch(Objects::isNull));
+
+
+    public Function<Map<String,Object>, Phone> createObject = x -> new Phone((String) x.get("title"),(Integer)x.get("count"),(Double)x.get("price"),(String) x.get("model"),(Manufacturer) x.get("manufacturer"),(List<String>) x.get("details"));
 }

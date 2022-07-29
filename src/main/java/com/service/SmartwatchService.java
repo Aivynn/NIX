@@ -63,6 +63,11 @@ public class SmartwatchService extends ProductService<Smartwatch> {
     }
 
     @Override
+    public Smartwatch createFromObject(Smartwatch smartwatch) {
+        return null;
+    }
+
+    @Override
     public void update(Smartwatch smartwatch, double price) {
         smartwatch.setPrice(price);
         repository.update(smartwatch);
