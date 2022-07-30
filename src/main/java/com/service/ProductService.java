@@ -104,8 +104,9 @@ public abstract class ProductService<T extends Product> {
     }
 
     public void allPrices() {
-        repository.getAll()
-                .forEach(phone -> System.out.println(phone.getPrice()));
+        DoubleSummaryStatistics statistics = repository.getAll().stream()
+                .mapToDouble(Product::getPrice)
+                .summaryStatistics();
     }
 
     public Predicate<Collection<T>> hasPrice = (phone -> phone.stream().map(Product::getPrice).anyMatch(Objects::isNull));
