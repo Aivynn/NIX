@@ -69,11 +69,11 @@ public class PhoneService extends ProductService<Phone> {
 
     @Override
     public Phone createFromObject(Phone phone) {
-        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(),phone.getDetails());
+        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(), phone.getDetails());
     }
 
     @Override
-    public void update(Phone phone,double price) {
+    public void update(Phone phone, double price) {
         phone.setPrice(price);
         repository.update(phone);
         LOGGER.info("Notebook {} has been updated", phone.getId());
@@ -86,28 +86,6 @@ public class PhoneService extends ProductService<Phone> {
         }
         return false;
     }
-
-    public void expensivePhone(double price) {
-        repository.getAll().stream()
-                .filter(phone -> price > phone.getPrice())
-                .forEach(phone -> System.out.println(phone.getTitle()));
-    }
-
-    public void allPhonePrices() {
-       Double price = repository.getAll().stream().mapToDouble(Product::getPrice).sum();
-       System.out.println(price);
-    }
-
-    public Map<String, ProductType> sortByTitle() {
-        return repository.getAll().stream()
-                .sorted(Comparator.comparing(Product::getTitle)).distinct()
-                .collect(Collectors.toMap(Product::getId,Product::getType));
-    }
-    public void allPrices() {
-        repository.getAll()
-                .forEach(phone -> System.out.println(phone.getPrice()));
-    }
-
     public Optional<Boolean> findAny(String detail) {
         return repository.getAll()
                 .stream()
@@ -115,9 +93,4 @@ public class PhoneService extends ProductService<Phone> {
                 .findAny();
 
     }
-
-    public Predicate<Collection<Phone>> hasPrice = (phone -> phone.stream().map(Phone::getPrice).anyMatch(Objects::isNull));
-
-
-    public Function<Map<String,Object>, Phone> createObject = x -> new Phone((String) x.get("title"),(Integer)x.get("count"),(Double)x.get("price"),(String) x.get("model"),(Manufacturer) x.get("manufacturer"),(List<String>) x.get("details"));
 }
