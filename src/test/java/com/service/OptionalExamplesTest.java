@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.Manufacturer;
+import com.model.OperationSystem;
 import com.model.Phone;
 import com.model.Product;
 import com.repository.PhoneRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,7 +22,8 @@ import static org.mockito.Mockito.times;
 public class OptionalExamplesTest {
 
     final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE,Stream.of("foo", "bar")
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList()),new OperationSystem(11,"Android"),
+            LocalDateTime.now());
     private PhoneRepository repository;
 
     private OptionalExamples target;
@@ -31,12 +34,6 @@ public class OptionalExamplesTest {
         target = new OptionalExamples(repository);
     }
 
-
-    @Test
-    void checkLength() {
-        target.checkLength(phone.getTitle());
-        Mockito.verify(repository.findByTitle(phone.getTitle()));
-    }
     @Test
     void checkLengthFail() {
         String title = "asd";
@@ -60,15 +57,6 @@ public class OptionalExamplesTest {
         String createdPhoneTitle = target.findOrCreate(title).getTitle();
 
         Assertions.assertEquals(title,createdPhoneTitle);
-    }
-    @Test
-    public void upsertPhoneTitle() {
-        String title = "asdfgh";
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-        target.updateOrCreate(phone.getId(),title).get();
-        ArgumentCaptor<Phone> argumentCaptor = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).update(argumentCaptor.capture());
-        Assertions.assertEquals(title,argumentCaptor.getValue().getTitle());
     }
 
     @Test
@@ -99,7 +87,8 @@ public class OptionalExamplesTest {
     @Test
     public void upsertPhone() {
         Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE, Stream.of("foo", "bar")
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()),new OperationSystem(11,"Android"),
+                LocalDateTime.now());
         Mockito.when(repository.findById(test.getId())).thenReturn(Optional.of(test));
         target.upsertPhone(test);
         Mockito.verify(repository).update(test);
@@ -108,7 +97,8 @@ public class OptionalExamplesTest {
     @Test
     public void upsertPhoneNotFound() {
         Phone test = new Phone("a234", 100, 600, "Model", Manufacturer.APPLE,Stream.of("foo", "bar")
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()),new OperationSystem(11,"Android"),
+                LocalDateTime.now());
         Mockito.when(repository.findById(test.getId())).thenReturn(Optional.empty());
         target.upsertPhone(test);
         Mockito.verify(repository,times(0)).update(any(Phone.class));

@@ -1,13 +1,11 @@
 package com.service;
 
-import com.model.Manufacturer;
-import com.model.Phone;
-import com.model.Product;
-import com.model.ProductType;
+import com.model.*;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -63,13 +61,15 @@ public class PhoneService extends ProductService<Phone> {
                 "Model-" + RANDOM.nextInt(10),
                 getRandomManufacturer(),
                 Stream.of("foo", "bar")
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                new OperationSystem(11,"Android"),
+                LocalDateTime.now()
         );
     }
 
     @Override
     public Phone createFromObject(Phone phone) {
-        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(), phone.getDetails());
+        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(), phone.getDetails(), new OperationSystem(11,"Android"), LocalDateTime.now());
     }
 
     @Override

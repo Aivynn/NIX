@@ -3,12 +3,14 @@ package com;
 import com.Command.Command;
 import com.Command.Commands;
 
+import java.io.IOException;
+
 import static com.Command.Command.SCANNER;
 
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         final Commands[] values = Commands.values();
         boolean exit;
 
@@ -17,7 +19,7 @@ public class Main {
         } while (!exit);
     }
 
-    private static boolean userAction(final Commands[] values) {
+    private static boolean userAction(final Commands[] values) throws IOException {
         int userCommand = -1;
         do {
             for (int i = 0; i < values.length; i++) {

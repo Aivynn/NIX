@@ -6,6 +6,7 @@ import com.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -114,7 +115,7 @@ public abstract class ProductService<T extends Product> {
 
     public Function<Map<String, Object>, T> createObject = x -> {
         if (x.get("type") == PHONE) {
-            return (T) new Phone((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"), (List<String>) x.get("details"));
+            return (T) new Phone((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"), (List<String>) x.get("details"), new OperationSystem(11,"Android"), LocalDateTime.now());
         }
         if (x.get("type") == NOTEBOOK) {
             return (T) new Notebook((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));

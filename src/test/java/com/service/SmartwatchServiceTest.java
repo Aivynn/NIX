@@ -56,16 +56,6 @@ class SmartwatchServiceTest {
     }
 
     @Test
-    void saveSmartwatch() {
-        target.createAndSaveProducts(1);
-
-        ArgumentCaptor<List<Smartwatch>> argument = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(repository).saveAll(argument.capture());
-        Assertions.assertTrue(argument.getValue().get(0).getTitle().contains("Title"), "Title");
-    }
-
-
-    @Test
     void changePrice() {
         double previousPrice = smartwatch.getPrice();
         Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
@@ -73,24 +63,6 @@ class SmartwatchServiceTest {
         Mockito.verify(repository).update(smartwatch);
         Assertions.assertNotEquals(previousPrice, smartwatch.getPrice());
     }
-
-    @Test
-    void delete() {
-        Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
-
-
-        Mockito.verify(repository).findById(smartwatch.getId());
-        Mockito.verify(repository).delete(smartwatch.getId());
-    }
-
-    @Test
-    void deleteWhenIdIsNotPresent() {
-        Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-
-        Mockito.verify(repository).findById(smartwatch.getId());
-        Mockito.verify(repository, times(0)).delete(smartwatch.getId());
-    }
-
     @Test
     void createAndSave() {
         int count = 5;

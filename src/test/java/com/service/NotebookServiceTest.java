@@ -65,14 +65,6 @@ class NotebookServiceTest {
     }
 
     @Test
-    void delete() {
-        Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));
-
-        Mockito.verify(repository).findById(notebook.getId());
-        Mockito.verify(repository).delete(notebook.getId());
-    }
-
-    @Test
     void createAndSave() {
         int count = 5;
         target.createAndSaveProducts(count);
