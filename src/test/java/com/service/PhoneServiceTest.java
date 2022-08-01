@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.Manufacturer;
+import com.model.OperationSystem;
 import com.model.Phone;
 import com.model.Product;
 import com.repository.PhoneRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +23,10 @@ import static org.mockito.Mockito.*;
 
 class PhoneServiceTest {
 
-    final  List<String> list = Stream.of("foo", "bar")
+    final List<String> list = Stream.of("foo", "bar")
             .collect(Collectors.toList());
-    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE,list);
+    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE, list, new OperationSystem(11, "Android"),
+            LocalDateTime.now());
     private PhoneService target;
     private PhoneRepository repository;
 
@@ -71,14 +74,6 @@ class PhoneServiceTest {
         Assertions.assertNotEquals(previousPrice, phone.getPrice());
     }
 
-    @Test
-    void delete() {
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-
-        Mockito.verify(repository).findById(phone.getId());
-        Mockito.verify(repository).delete(phone.getId());
-    }
-
 
     @Test
     void createAndSave() {
@@ -97,11 +92,6 @@ class PhoneServiceTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
 
-    @Test
-    void isIdValid() {
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));;
-        verify(repository).delete(isA(String.class));
-    }
 
     @Test
     public void updateTitle() {
