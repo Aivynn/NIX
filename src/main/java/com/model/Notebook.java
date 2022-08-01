@@ -13,7 +13,7 @@ public class Notebook extends Product {
 
 
     public Notebook(String title, int count, double price, String model, Manufacturer manufacturer) {
-        super(title, count, price);
+        super(title, count, price,ProductType.NOTEBOOK);
         this.model = model;
         this.manufacturer = manufacturer;
     }

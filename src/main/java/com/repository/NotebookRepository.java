@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.model.Notebook;
+import com.model.Smartwatch;
 
 import java.util.*;
 
@@ -12,6 +13,14 @@ public class NotebookRepository implements CrudRepository<Notebook> {
         notebooks = new LinkedList<>();
     }
 
+    private static NotebookRepository instance;
+
+    public static NotebookRepository getInstance() {
+        if (instance == null) {
+            instance = new NotebookRepository();
+        }
+        return instance;
+    }
 
     @Override
     public void save(Notebook notebook) {
@@ -74,6 +83,17 @@ public class NotebookRepository implements CrudRepository<Notebook> {
         Notebook result = null;
         for (Notebook notebook : notebooks) {
             if (notebook.getId().equals(id)) {
+                result = notebook;
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<Notebook> findByTitle(String title) {
+        Notebook result = null;
+        for (Notebook notebook : notebooks) {
+            if (notebook.getId().equals(title)) {
                 result = notebook;
             }
         }

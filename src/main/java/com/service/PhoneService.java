@@ -2,42 +2,37 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Phone;
+import com.model.Product;
+import com.model.ProductType;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class PhoneService {
+public class PhoneService extends ProductService<Phone> {
+
     private static final Random RANDOM = new Random();
     private final PhoneRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
+    private static PhoneService instance;
+
     public PhoneService(PhoneRepository repository) {
+        super(repository);
         this.repository = repository;
 
     }
 
-    public void createAndSavePhones(int count) {
-
-        if(count <= 0) {
-            throw new IllegalArgumentException("Count can't be less then zero");
+    public static PhoneService getInstance() {
+        if (instance == null) {
+            instance = new PhoneService(PhoneRepository.getInstance());
         }
-        List<Phone> phones = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
-            Phone phone = (new Phone(
-                    "Title-" + RANDOM.nextInt(1000),
-                    RANDOM.nextInt(500),
-                    RANDOM.nextInt(1000),
-                    "Model-" + RANDOM.nextInt(10),
-                    getRandomManufacturer()
-            ));
-            phones.add(phone);
-            LOGGER.info("Phone {} has been created", phone.getId());
-        }
-        repository.saveAll(phones);
+        return instance;
     }
 
     private Manufacturer getRandomManufacturer() {
@@ -46,16 +41,10 @@ public class PhoneService {
         return values[index];
     }
 
-    public void printAll() {
-        for (Phone phone : repository.getAll()) {
-            System.out.println(phone);
-        }
-    }
-
     public boolean changePrice(String id) {
         return repository.findById(id).map(phone -> {
             LOGGER.info("{}", phone);
-            phone.setPrice(RANDOM.nextInt(1000));
+            phone.setPrice((double) RANDOM.nextInt(1000));
             repository.update(phone);
             LOGGER.info("{}", phone);
             return true;
@@ -65,34 +54,70 @@ public class PhoneService {
         });
     }
 
-    public boolean delete(String id) {
-        return repository.findById(id).map(phone -> {
-            LOGGER.info("{}", repository.getAll());
-            repository.delete(id);
-            LOGGER.info("{}, has been deleted", phone);
-            LOGGER.info("{}", repository.getAll());
-            return true;
-        }).orElseGet(() -> {
-            LOGGER.info("No such id, try again");
-            return false;
-        });
+    @Override
+    protected Phone createProduct() {
+        return new Phone(
+                Phone.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
+                RANDOM.nextInt(500),
+                RANDOM.nextDouble(1000.0),
+                "Model-" + RANDOM.nextInt(10),
+                getRandomManufacturer(),
+                Stream.of("foo", "bar")
+                        .collect(Collectors.toList())
+        );
     }
 
-    public List<Phone> getAll() {
-        return repository.getAll();
+    @Override
+    public Phone createFromObject(Phone phone) {
+        return new Phone(phone.getId(), phone.getCount(), phone.getPrice(), phone.getModel(), phone.getManufacturer(),phone.getDetails());
     }
 
-    public boolean savePhone(Phone phone) {
-        if (phone.getCount() == 0) {
-            phone.setCount(-1);
-        }
-       return repository.update(phone);
+    @Override
+    public void update(Phone phone,double price) {
+        phone.setPrice(price);
+        repository.update(phone);
+        LOGGER.info("Notebook {} has been updated", phone.getId());
     }
-    public boolean updateTitle(Phone phone,String title) {
-        if(title.length() > 3){
+
+    public boolean updateTitle(Phone phone, String title) {
+        if (title.length() > 3) {
             phone.setTitle(title);
-           return repository.update(phone);
+            return repository.update(phone);
         }
         return false;
     }
+
+    public void expensivePhone(double price) {
+        repository.getAll().stream()
+                .filter(phone -> price > phone.getPrice())
+                .forEach(phone -> System.out.println(phone.getTitle()));
+    }
+
+    public void allPhonePrices() {
+       Double price = repository.getAll().stream().mapToDouble(Product::getPrice).sum();
+       System.out.println(price);
+    }
+
+    public Map<String, ProductType> sortByTitle() {
+        return repository.getAll().stream()
+                .sorted(Comparator.comparing(Product::getTitle)).distinct()
+                .collect(Collectors.toMap(Product::getId,Product::getType));
+    }
+    public void allPrices() {
+        repository.getAll()
+                .forEach(phone -> System.out.println(phone.getPrice()));
+    }
+
+    public Optional<Boolean> findAny(String detail) {
+        return repository.getAll()
+                .stream()
+                .flatMap(phone -> phone.getDetails().stream().map(s -> Objects.equals(s, detail)))
+                .findAny();
+
+    }
+
+    public Predicate<Collection<Phone>> hasPrice = (phone -> phone.stream().map(Phone::getPrice).anyMatch(Objects::isNull));
+
+
+    public Function<Map<String,Object>, Phone> createObject = x -> new Phone((String) x.get("title"),(Integer)x.get("count"),(Double)x.get("price"),(String) x.get("model"),(Manufacturer) x.get("manufacturer"),(List<String>) x.get("details"));
 }
