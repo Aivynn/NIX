@@ -4,12 +4,18 @@ package com.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class Notebook extends Product {
 
     private final String model;
     private final Manufacturer manufacturer;
+
+    private LocalDateTime date;
+
+    private OperationSystem operationSystem;
 
 
     public Notebook(String title, int count, double price, String model, Manufacturer manufacturer) {

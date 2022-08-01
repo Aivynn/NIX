@@ -1,11 +1,14 @@
 package com.service;
 
 import com.model.Manufacturer;
+import com.model.OperationSystem;
 import com.model.Phone;
 import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -28,7 +31,7 @@ public class OptionalExamples{
 
     public Phone createPhone(String title) {
        return new Phone(title, 100, 956.74, "Model", Manufacturer.APPLE, Stream.of("foo", "bar")
-               .collect(Collectors.toList()));
+               .collect(Collectors.toList()), new OperationSystem(12,"android"), LocalDateTime.now());
     }
 
     public void checkLength(String title) {

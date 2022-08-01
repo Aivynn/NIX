@@ -9,6 +9,7 @@ public enum Commands {
     UPDATE("Update product", new Update()),
     PRINT("Print products", new Print()),
     DELETE("Delete products", new Delete()),
+    READ_FROM_FILE("Create object from XML/JSON", new CreateObject()),
     EXIT("Exit", null);
 
     private final String name;
