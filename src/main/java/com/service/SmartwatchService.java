@@ -38,18 +38,6 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
-    public boolean changePrice(String id) {
-        return repository.findById(id).map(smartwatch -> {
-            LOGGER.info("{}", smartwatch);
-            smartwatch.setPrice((double) RANDOM.nextInt(1000));
-            LOGGER.info("{}", smartwatch);
-            return repository.update(smartwatch);
-        }).orElseGet(() -> {
-            LOGGER.info("No such id, try again");
-            return false;
-        });
-    }
-
 
     @Override
     protected Smartwatch createProduct() {

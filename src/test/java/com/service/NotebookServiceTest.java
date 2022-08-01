@@ -56,15 +56,6 @@ class NotebookServiceTest {
     }
 
     @Test
-    void changePrice() {
-        double previousPrice = notebook.getPrice();
-        Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));
-        target.changePrice(notebook.getId());
-        Mockito.verify(repository).update(notebook);
-        Assertions.assertNotEquals(previousPrice, notebook.getPrice());
-    }
-
-    @Test
     void createAndSave() {
         int count = 5;
         target.createAndSaveProducts(count);

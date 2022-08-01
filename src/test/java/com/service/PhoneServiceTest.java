@@ -64,17 +64,6 @@ class PhoneServiceTest {
         target.printAll();
         Mockito.verify(repository).getAll();
     }
-
-    @Test
-    void changePrice() {
-        double previousPrice = phone.getPrice();
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-        target.changePrice(phone.getId());
-        Mockito.verify(repository).update(phone);
-        Assertions.assertNotEquals(previousPrice, phone.getPrice());
-    }
-
-
     @Test
     void createAndSave() {
         int count = 5;

@@ -2,15 +2,10 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Notebook;
-import com.model.Phone;
-import com.repository.CrudRepository;
 import com.repository.NotebookRepository;
-import com.repository.PhoneRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 public class NotebookService extends ProductService<Notebook> {
@@ -60,17 +55,5 @@ public class NotebookService extends ProductService<Notebook> {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
-    }
-
-    public boolean changePrice(String id) {
-        return repository.findById(id).map(notebook -> {
-            LOGGER.info("{}", notebook);
-            notebook.setPrice((double) RANDOM.nextInt(1000));
-            LOGGER.info("{}", notebook);
-            return repository.update(notebook);
-        }).orElseGet(() -> {
-            LOGGER.info("No such id, try again");
-            return false;
-        });
     }
 }

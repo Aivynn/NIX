@@ -54,15 +54,6 @@ class SmartwatchServiceTest {
         target.printAll();
         Mockito.verify(repository).getAll();
     }
-
-    @Test
-    void changePrice() {
-        double previousPrice = smartwatch.getPrice();
-        Mockito.when(repository.findById(smartwatch.getId())).thenReturn(Optional.of(smartwatch));
-        target.changePrice(smartwatch.getId());
-        Mockito.verify(repository).update(smartwatch);
-        Assertions.assertNotEquals(previousPrice, smartwatch.getPrice());
-    }
     @Test
     void createAndSave() {
         int count = 5;

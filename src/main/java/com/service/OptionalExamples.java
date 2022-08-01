@@ -4,24 +4,15 @@ import com.model.Manufacturer;
 import com.model.OperationSystem;
 import com.model.Phone;
 import com.repository.PhoneRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class OptionalExamples{
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
-
     private final PhoneRepository repository;
 
-    private static final Random RANDOM = new Random();
 
 
     public OptionalExamples(PhoneRepository repository) {

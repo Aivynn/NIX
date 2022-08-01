@@ -5,10 +5,8 @@ import com.model.Phone;
 import com.model.ProductType;
 import com.model.Smartwatch;
 
-import java.util.Random;
 
 public class ProductFactory {
-    private static final Random RANDOM = new Random();
 
     private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();
     private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
