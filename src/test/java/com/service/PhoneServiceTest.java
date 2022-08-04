@@ -1,7 +1,9 @@
 package com.service;
 
 import com.model.Manufacturer;
+import com.model.OperationSystem;
 import com.model.Phone;
+import com.model.Product;
 import com.repository.PhoneRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,16 +11,25 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class PhoneServiceTest {
-    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE);
+
+    final List<String> list = Stream.of("foo", "bar")
+            .collect(Collectors.toList());
+    final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE, list, new OperationSystem(11, "Android"),
+            LocalDateTime.now());
     private PhoneService target;
     private PhoneRepository repository;
+
 
     @BeforeEach
     void setUp() {
@@ -28,17 +39,17 @@ class PhoneServiceTest {
 
     @Test
     void createAndSavePhones_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSavePhones_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSavePhones() {
-        target.createAndSavePhones(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -55,27 +66,6 @@ class PhoneServiceTest {
     }
 
     @Test
-    void updatePhone() {
-        final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE);
-        target.savePhone(phone);
-
-        ArgumentCaptor<Phone> argument = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-    }
-
-    @Test
-    void savePhone_zeroCount() {
-        phone.setCount(0);
-        target.savePhone(phone);
-
-        ArgumentCaptor<Phone> argument = ArgumentCaptor.forClass(Phone.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
-
-    @Test
     void changePrice() {
         double previousPrice = phone.getPrice();
         Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
@@ -84,31 +74,11 @@ class PhoneServiceTest {
         Assertions.assertNotEquals(previousPrice, phone.getPrice());
     }
 
-    @Test
-    void delete() {
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-
-        boolean delete = target.delete(phone.getId());
-
-        Mockito.verify(repository).findById(phone.getId());
-        Mockito.verify(repository).delete(phone.getId());
-        Assertions.assertTrue(delete);
-    }
-
-    @Test
-    void deleteWhenIdIsNotPresent() { ;
-        Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-        boolean delete = target.delete(phone.getId());
-
-        Mockito.verify(repository).findById(phone.getId());
-        Mockito.verify(repository, times(0)).delete(phone.getId());
-        Assertions.assertFalse(delete);
-    }
 
     @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSavePhones(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Phone>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
@@ -119,16 +89,9 @@ class PhoneServiceTest {
     void createAndSaveNotCalled() {
         int count = -5;
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSavePhones(count));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(count));
     }
 
-    @Test
-    void isIdValid() {
-        Mockito.when(repository.findById(phone.getId())).thenReturn(Optional.of(phone));
-        boolean delete = target.delete(phone.getId());
-        verify(repository).delete(isA(String.class));
-        Assertions.assertTrue(delete);
-    }
 
     @Test
     public void updateTitle() {

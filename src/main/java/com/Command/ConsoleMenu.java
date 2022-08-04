@@ -1,25 +1,12 @@
-package com;
-
-import com.Command.Command;
-import com.Command.Commands;
+package com.Command;
 
 import java.io.IOException;
 
 import static com.Command.Command.SCANNER;
 
+public class ConsoleMenu {
 
-public class Main {
-
-    public static void main(String[] args) throws IOException {
-        final Commands[] values = Commands.values();
-        boolean exit;
-
-        do {
-            exit = userAction(values);
-        } while (!exit);
-    }
-
-    private static boolean userAction(final Commands[] values) throws IOException {
+    public static boolean menu(final Commands[] values) throws IOException {
         int userCommand = -1;
         do {
             for (int i = 0; i < values.length; i++) {

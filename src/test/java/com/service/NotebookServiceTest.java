@@ -29,17 +29,17 @@ class NotebookServiceTest {
 
     @Test
     void createAndSaveNotebooks_negativeCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(-1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(-1));
     }
 
     @Test
     void createAndSaveNotebooks_zeroCount() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveProducts(0));
     }
 
     @Test
     void createAndSaveNotebooks() {
-        target.createAndSaveNotebooks(2);
+        target.createAndSaveProducts(2);
         Mockito.verify(repository).saveAll(Mockito.anyList());
     }
 
@@ -56,26 +56,6 @@ class NotebookServiceTest {
     }
 
     @Test
-    void saveNotebook() {
-        target.saveNotebook(notebook);
-
-        ArgumentCaptor<Notebook> argument = ArgumentCaptor.forClass(Notebook.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-    }
-
-    @Test
-    void saveNotebook_zeroCount() {
-        notebook.setCount(0);
-        target.saveNotebook(notebook);
-
-        ArgumentCaptor<Notebook> argument = ArgumentCaptor.forClass(Notebook.class);
-        Mockito.verify(repository).update(argument.capture());
-        Assertions.assertEquals("Title", argument.getValue().getTitle());
-        Assertions.assertEquals(-1, argument.getValue().getCount());
-    }
-
-    @Test
     void changePrice() {
         double previousPrice = notebook.getPrice();
         Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));
@@ -85,50 +65,13 @@ class NotebookServiceTest {
     }
 
     @Test
-    void delete() {
-        Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));
-
-        boolean delete = target.delete(notebook.getId());
-
-        Mockito.verify(repository).findById(notebook.getId());
-        Mockito.verify(repository).delete(notebook.getId());
-        Assertions.assertTrue(delete);
-    }
-
-    @Test
-    void deleteWhenIdIsNotPresent() {
-        Mockito.when(repository.findById(any())).thenReturn(Optional.empty());
-        boolean delete = target.delete(notebook.getId());
-
-        Mockito.verify(repository).findById(notebook.getId());
-        Mockito.verify(repository, times(0)).delete(notebook.getId());
-        Assertions.assertFalse(delete);
-    }
-
-    @Test
     void createAndSave() {
         int count = 5;
-        target.createAndSaveNotebooks(count);
+        target.createAndSaveProducts(count);
 
         ArgumentCaptor<List<Notebook>> argumentCaptor = ArgumentCaptor.forClass((Class) List.class);
         Mockito.verify(repository).saveAll(argumentCaptor.capture());
         Assertions.assertEquals(count, argumentCaptor.getValue().size());
     }
-
-    @Test
-    void createAndSaveNotCalled() {
-        int count = -5;
-
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.createAndSaveNotebooks(count));
-    }
-
-    @Test
-    void isIdValid() {
-        Mockito.when(repository.findById(notebook.getId())).thenReturn(Optional.of(notebook));
-        boolean delete = target.delete(notebook.getId());
-        verify(repository).delete(isA(String.class));
-        Assertions.assertTrue(delete);
-    }
-
 
 }
