@@ -53,11 +53,10 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     @Override
     protected Smartwatch createProduct() {
-        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0))
+        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0),getRandomManufacturer())
                 .title(Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000))
                 .count(RANDOM.nextInt(500))
                 .model("Model-" + RANDOM.nextInt(10))
-                .manufacturer(getRandomManufacturer())
                 .build();
     }
 

@@ -121,10 +121,9 @@ public abstract class ProductService<T extends Product> {
             return new Notebook((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
         }
         if (x.get("type") == SMARTWATCH) {
-            return  new Smartwatch.SmartwatchBuilder((Double) x.get("price"))
+            return  new Smartwatch.SmartwatchBuilder((Double) x.get("price"),((Manufacturer) x.get("manufacturer")))
                     .count((Integer) x.get("count"))
                     .title((String) x.get("title"))
-                    .manufacturer((Manufacturer) x.get("manufacturer"))
                     .model((String) x.get("model")).build();
         }
         throw new IllegalArgumentException("No such type, try again");

@@ -18,11 +18,10 @@ class SmartwatchRepositoryTest {
     void setUp() {
         final Random random = new Random();
         target = new SmartwatchRepository();
-        smartwatch = new Smartwatch.SmartwatchBuilder((double) random.nextInt(1000))
+        smartwatch = new Smartwatch.SmartwatchBuilder((double) random.nextInt(1000),Manufacturer.APPLE)
                 .title("Title-" + random.nextInt(1000))
                 .count(random.nextInt(500))
                 .model("Model-" + random.nextInt(10))
-                .manufacturer(Manufacturer.APPLE)
                 .build();
     }
 
@@ -58,11 +57,10 @@ class SmartwatchRepositoryTest {
 
     @Test
     void saveAll_manySmartwatchs() {
-        final Smartwatch otherSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+        final Smartwatch otherSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
                 .count(500)
                 .model( "Model")
                 .title("title")
-                .manufacturer(Manufacturer.APPLE)
                 .build();
         target.saveAll(List.of(smartwatch, otherSmartwatch));
         final List<Smartwatch> smartwatchs = target.getAll();
@@ -108,11 +106,10 @@ class SmartwatchRepositoryTest {
     @Test
     void update_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
                 .count(500)
                 .model( "Model")
                 .title("title")
-                .manufacturer(Manufacturer.APPLE)
                 .build();
         final boolean result = target.update(noSmartwatch);
 
@@ -135,11 +132,10 @@ class SmartwatchRepositoryTest {
     @Test
     void delete_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
                 .count(500)
                 .model( "Model")
                 .title("title")
-                .manufacturer(Manufacturer.APPLE)
                 .build();
         final boolean result = target.delete(noSmartwatch.getId());
         Assertions.assertFalse(result);

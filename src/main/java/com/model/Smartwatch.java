@@ -43,15 +43,10 @@ public class Smartwatch extends Product {
             this.model = model;
             return this;
         }
-        public SmartwatchBuilder manufacturer(Manufacturer manufacturer) {
-            this.manufacturer = manufacturer;
-            return this;
-        }
-
-        public SmartwatchBuilder(Double price) {
+        public SmartwatchBuilder(Double price, Manufacturer manufacturer) {
             this.id = UUID.randomUUID().toString();
             this.price = price;
-            this.type = ProductType.SMARTWATCH;
+            this.manufacturer = manufacturer;
         }
 
         public SmartwatchBuilder count(Integer count) {
