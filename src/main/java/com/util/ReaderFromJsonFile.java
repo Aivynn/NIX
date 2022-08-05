@@ -1,22 +1,27 @@
-package com.Command;
+package com.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import com.Command.Reader;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class ReaderFromJsonFile extends Reader {
     private static final Pattern PATTERN_LEVEL = Pattern.compile("\\\"(.*)\\\"([A-z0-9-:$]+)");
 
 
-    public HashMap<String, String> parserToProduct() throws IOException {
+    public HashMap<String, String> parserToProduct() throws IOException, URISyntaxException {
 
+        URL reader = this.getClass().getClassLoader().getResource("phone.json");
         HashMap<String, String> map = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/com/model/phone.json"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
+        try (Stream<String> br = Files.lines(Path.of(reader.toURI()))) {
+            br.forEach(line -> {
                 boolean flag = false;
                 int i = 0;
                 String result = getLevelFromLine(line).trim();
@@ -29,7 +34,7 @@ public class ReaderFromJsonFile extends Reader {
                         i++;
                     }
                 }
-            }
+            });
         }
         return map;
     }

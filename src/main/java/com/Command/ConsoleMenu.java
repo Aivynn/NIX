@@ -1,12 +1,13 @@
 package com.Command;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static com.Command.Command.SCANNER;
 
 public class ConsoleMenu {
 
-    public static boolean menu(final Commands[] values) throws IOException {
+    public static boolean menu(final Commands[] values) throws IOException, URISyntaxException {
         int userCommand = -1;
         do {
             for (int i = 0; i < values.length; i++) {

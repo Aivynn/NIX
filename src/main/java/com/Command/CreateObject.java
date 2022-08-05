@@ -5,8 +5,11 @@ import com.service.NotebookService;
 import com.service.PhoneService;
 import com.service.ProductService;
 import com.service.SmartwatchService;
+import com.util.ReadFromXMLFIle;
+import com.util.ReaderFromJsonFile;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -19,9 +22,9 @@ public class CreateObject implements Command {
     private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
     private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
     @Override
-    public void execute() throws IOException {
+    public void execute() throws IOException, URISyntaxException {
         System.out.println("What type of file you want to read?");
-        final Files[] values = Files.values();
+        final FileTypes[] values = FileTypes.values();
         int userType = -1;
         do {
             for (int i = 0; i < values.length; i++) {

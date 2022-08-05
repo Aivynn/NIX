@@ -4,13 +4,14 @@ import com.Command.Command;
 import com.Command.Commands;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static com.Command.Command.SCANNER;
 
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         final Commands[] values = Commands.values();
         boolean exit;
 
@@ -19,7 +20,7 @@ public class Main {
         } while (!exit);
     }
 
-    private static boolean userAction(final Commands[] values) throws IOException {
+    private static boolean userAction(final Commands[] values) throws IOException, URISyntaxException {
         int userCommand = -1;
         do {
             for (int i = 0; i < values.length; i++) {

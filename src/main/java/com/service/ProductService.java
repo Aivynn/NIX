@@ -113,15 +113,15 @@ public abstract class ProductService<T extends Product> {
     public Predicate<Collection<T>> hasPrice = (phone -> phone.stream().map(Product::getPrice).anyMatch(Objects::isNull));
 
 
-    public Function<Map<String, Object>, T> createObject = x -> {
+    public Function<Map<String, Object>, ? extends Product> createObject = x -> {
         if (x.get("type") == PHONE) {
-            return (T) new Phone((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"), (List<String>) x.get("details"), new OperationSystem(11,"Android"), LocalDateTime.now());
+            return new Phone((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"), (List<String>) x.get("details"), new OperationSystem(11,"Android"), LocalDateTime.now());
         }
         if (x.get("type") == NOTEBOOK) {
-            return (T) new Notebook((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
+            return new Notebook((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
         }
         if (x.get("type") == SMARTWATCH) {
-            return (T) new Smartwatch((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
+            return  new Smartwatch((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
         }
         throw new IllegalArgumentException("No such type, try again");
     };
