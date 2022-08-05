@@ -17,7 +17,12 @@ import static org.mockito.Mockito.*;
 
 class SmartwatchServiceTest {
 
-    private final static Smartwatch smartwatch = new Smartwatch("Title", 100, 5555, "Model", Manufacturer.SAMSUNG);
+    private final static Smartwatch smartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+            .count(500)
+            .model( "Model")
+            .title("title")
+            .manufacturer(Manufacturer.APPLE)
+            .build();
     private SmartwatchService target;
     private SmartwatchRepository repository;
 

@@ -18,13 +18,12 @@ class SmartwatchRepositoryTest {
     void setUp() {
         final Random random = new Random();
         target = new SmartwatchRepository();
-        smartwatch = new Smartwatch(
-                "Title-" + random.nextInt(1000),
-                random.nextInt(500),
-                random.nextInt(1000),
-                "Model-" + random.nextInt(10),
-                Manufacturer.APPLE
-        );
+        smartwatch = new Smartwatch.SmartwatchBuilder((double) random.nextInt(1000))
+                .title("Title-" + random.nextInt(1000))
+                .count(random.nextInt(500))
+                .model("Model-" + random.nextInt(10))
+                .manufacturer(Manufacturer.APPLE)
+                .build();
     }
 
     @Test
@@ -59,7 +58,12 @@ class SmartwatchRepositoryTest {
 
     @Test
     void saveAll_manySmartwatchs() {
-        final Smartwatch otherSmartwatch = new Smartwatch("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Smartwatch otherSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+                .count(500)
+                .model( "Model")
+                .title("title")
+                .manufacturer(Manufacturer.APPLE)
+                .build();
         target.saveAll(List.of(smartwatch, otherSmartwatch));
         final List<Smartwatch> smartwatchs = target.getAll();
         Assertions.assertEquals(2, smartwatchs.size());
@@ -72,7 +76,7 @@ class SmartwatchRepositoryTest {
         final List<Smartwatch> smartwatchs = new ArrayList<>();
         smartwatchs.add(smartwatch);
         smartwatchs.add(smartwatch);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->target.saveAll(smartwatchs));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.saveAll(smartwatchs));
     }
 
     @Test
@@ -104,7 +108,12 @@ class SmartwatchRepositoryTest {
     @Test
     void update_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+                .count(500)
+                .model( "Model")
+                .title("title")
+                .manufacturer(Manufacturer.APPLE)
+                .build();
         final boolean result = target.update(noSmartwatch);
 
         Assertions.assertFalse(result);
@@ -126,7 +135,12 @@ class SmartwatchRepositoryTest {
     @Test
     void delete_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch("Title", 500, 1000.0, "Model", Manufacturer.APPLE);
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0)
+                .count(500)
+                .model( "Model")
+                .title("title")
+                .manufacturer(Manufacturer.APPLE)
+                .build();
         final boolean result = target.delete(noSmartwatch.getId());
         Assertions.assertFalse(result);
         final List<Smartwatch> actualResult = target.getAll();
@@ -152,10 +166,11 @@ class SmartwatchRepositoryTest {
         final Optional<Smartwatch> optionalSmartwatch = target.findById(smartwatch.getId());
         Assertions.assertTrue(optionalSmartwatch.isPresent());
         final Smartwatch actualSmartwatch = optionalSmartwatch.get();
-        Assertions.assertEquals(smartwatch.getId(),actualSmartwatch.getId());
+        Assertions.assertEquals(smartwatch.getId(), actualSmartwatch.getId());
     }
+
     @Test
     void updateNull() {
-        Assertions.assertThrows(IllegalArgumentException.class,() -> target.update(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> target.update(null));
     }
 }

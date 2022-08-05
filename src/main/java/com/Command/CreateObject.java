@@ -76,11 +76,12 @@ public class CreateObject implements Command {
                     Stream.of("a", "b").toList(),
                     new OperationSystem((Integer.parseInt(map.get("version"))), map.get("designation")),
                     time));
-            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch(map.get("title"),
-                    Integer.parseInt(map.get("count")),
-                    Double.parseDouble((map.get("price").replaceAll("[^0-9?!\\.]", ""))),
-                    map.get("model"),
-                    manufacturer));
+            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")))
+                    .count(Integer.parseInt(map.get("count")))
+                    .title(map.get("title"))
+                    .model(map.get("model"))
+                    .manufacturer(manufacturer)
+                    .build());
             case NOTEBOOK -> NOTEBOOK_SERVICE.save(new Notebook(map.get("title"),
                     Integer.parseInt(map.get("count")),
                     Double.parseDouble((map.get("price").replaceAll("[^0-9?!\\.]", ""))),
