@@ -1,10 +1,11 @@
 package com.repository;
 
 import com.model.Notebook;
-import com.model.Smartwatch;
+import com.util.Singleton;
 
 import java.util.*;
 
+@Singleton
 public class NotebookRepository implements CrudRepository<Notebook> {
 
     private final List<Notebook> notebooks;

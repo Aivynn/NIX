@@ -11,7 +11,7 @@ import com.service.SmartwatchService;
 
 
 public class Print implements Command{
-    private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();
+    private static final ProductService<Phone> PHONE_SERVICE = null;
     private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
     private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
     @Override

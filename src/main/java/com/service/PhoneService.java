@@ -2,35 +2,32 @@ package com.service;
 
 import com.model.*;
 import com.repository.PhoneRepository;
+import com.util.Autowired;
+import com.util.Bean;
+import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Singleton
 public class PhoneService extends ProductService<Phone> {
 
     private static final Random RANDOM = new Random();
+
     private final PhoneRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     private static PhoneService instance;
 
+    @Autowired
     public PhoneService(PhoneRepository repository) {
         super(repository);
         this.repository = repository;
 
-    }
-
-    public static PhoneService getInstance() {
-        if (instance == null) {
-            instance = new PhoneService(PhoneRepository.getInstance());
-        }
-        return instance;
     }
 
     private Manufacturer getRandomManufacturer() {

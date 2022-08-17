@@ -6,6 +6,8 @@ import com.model.Phone;
 import com.repository.CrudRepository;
 import com.repository.NotebookRepository;
 import com.repository.PhoneRepository;
+import com.util.Autowired;
+import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+@Singleton
 public class NotebookService extends ProductService<Notebook> {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotebookService.class);
     private static final Random RANDOM = new Random();
@@ -20,6 +23,7 @@ public class NotebookService extends ProductService<Notebook> {
 
     private static NotebookService instance;
 
+    @Autowired
     public NotebookService(NotebookRepository repository) {
         super(repository);
         this.repository = repository;

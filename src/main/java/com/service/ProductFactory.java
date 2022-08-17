@@ -4,15 +4,19 @@ import com.model.Notebook;
 import com.model.Phone;
 import com.model.ProductType;
 import com.model.Smartwatch;
+import com.util.Autowired;
 
 import java.util.Random;
 
 public class ProductFactory {
     private static final Random RANDOM = new Random();
 
-    private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();
-    private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
-    private static final ProductService<Smartwatch>  SMARTWATCH_SERVICE = SmartwatchService.getInstance();
+    @Autowired
+    private static PhoneService PHONE_SERVICE;
+    @Autowired
+    private static NotebookService NOTEBOOK_SERVICE;
+    @Autowired
+    private static SmartwatchService  SMARTWATCH_SERVICE;
 
     private ProductFactory() {
     }

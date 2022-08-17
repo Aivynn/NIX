@@ -14,6 +14,8 @@ public class Main {
 
         PRODUCT_BUNDLE_SERVICE.generateRandomProduct(3);
         NOTIFIABLE_PRODUCT_SERVICE.generateRandomProduct(3);
+        NOTIFIABLE_PRODUCT_SERVICE.generateRandomProduct(3);
         System.out.println("Notifications sent: " + NOTIFIABLE_PRODUCT_SERVICE.filterNotifiableProductsAndSendNotifications());
+
     }
 }

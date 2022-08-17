@@ -6,6 +6,8 @@ import com.model.Phone;
 import com.model.Smartwatch;
 import com.repository.PhoneRepository;
 import com.repository.SmartwatchRepository;
+import com.util.Autowired;
+import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+@Singleton
 public class SmartwatchService extends ProductService<Smartwatch> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmartwatchService.class);
     private static final Random RANDOM = new Random();
@@ -20,6 +23,7 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     private static SmartwatchService instance;
 
+    @Autowired
     public SmartwatchService(SmartwatchRepository repository) {
         super(repository);
         this.repository = repository;

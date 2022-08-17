@@ -5,6 +5,7 @@ import com.service.NotebookService;
 import com.service.PhoneService;
 import com.service.ProductService;
 import com.service.SmartwatchService;
+import com.util.Autowired;
 import com.util.ReadFromXMLFIle;
 import com.util.ReaderFromJsonFile;
 
@@ -18,9 +19,12 @@ import java.util.stream.Stream;
 
 public class CreateObject implements Command {
 
-    private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();
-    private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
-    private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
+    @Autowired
+    private static PhoneService PHONE_SERVICE;
+    @Autowired
+    private static NotebookService NOTEBOOK_SERVICE;
+    @Autowired
+    private static SmartwatchService SMARTWATCH_SERVICE;
     @Override
     public void execute() throws IOException, URISyntaxException {
         System.out.println("What type of file you want to read?");

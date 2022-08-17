@@ -2,8 +2,10 @@ package com;
 
 import com.Command.Command;
 import com.Command.Commands;
+import com.util.Annotations;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
 import static com.Command.Command.SCANNER;
@@ -11,7 +13,11 @@ import static com.Command.Command.SCANNER;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
+        Annotations test = new Annotations();
+        test.repositories();
+        test.services();
+        test.autowiredFields();
         final Commands[] values = Commands.values();
         boolean exit;
 

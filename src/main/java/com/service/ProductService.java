@@ -15,11 +15,14 @@ import java.util.stream.Collectors;
 import static com.model.ProductType.*;
 
 public abstract class ProductService<T extends Product> {
+
+    int i = 0;
     private final CrudRepository<T> repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     public ProductService(CrudRepository<T> repository) {
         this.repository = repository;
+        i++;
 
     }
 
