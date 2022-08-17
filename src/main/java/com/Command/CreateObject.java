@@ -5,8 +5,12 @@ import com.service.NotebookService;
 import com.service.PhoneService;
 import com.service.ProductService;
 import com.service.SmartwatchService;
+import com.util.Autowired;
+import com.util.ReadFromXMLFIle;
+import com.util.ReaderFromJsonFile;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -15,13 +19,16 @@ import java.util.stream.Stream;
 
 public class CreateObject implements Command {
 
-    private static final ProductService<Phone> PHONE_SERVICE = PhoneService.getInstance();
-    private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
-    private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
+    @Autowired
+    private static PhoneService PHONE_SERVICE;
+    @Autowired
+    private static NotebookService NOTEBOOK_SERVICE;
+    @Autowired
+    private static SmartwatchService SMARTWATCH_SERVICE;
     @Override
-    public void execute() throws IOException {
+    public void execute() throws IOException, URISyntaxException {
         System.out.println("What type of file you want to read?");
-        final Files[] values = Files.values();
+        final FileTypes[] values = FileTypes.values();
         int userType = -1;
         do {
             for (int i = 0; i < values.length; i++) {
@@ -73,11 +80,11 @@ public class CreateObject implements Command {
                     Stream.of("a", "b").toList(),
                     new OperationSystem((Integer.parseInt(map.get("version"))), map.get("designation")),
                     time));
-            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch(map.get("title"),
-                    Integer.parseInt(map.get("count")),
-                    Double.parseDouble((map.get("price").replaceAll("[^0-9?!\\.]", ""))),
-                    map.get("model"),
-                    manufacturer));
+            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")), manufacturer)
+                    .count(Integer.parseInt(map.get("count")))
+                    .title(map.get("title"))
+                    .model(map.get("model"))
+                    .build());
             case NOTEBOOK -> NOTEBOOK_SERVICE.save(new Notebook(map.get("title"),
                     Integer.parseInt(map.get("count")),
                     Double.parseDouble((map.get("price").replaceAll("[^0-9?!\\.]", ""))),

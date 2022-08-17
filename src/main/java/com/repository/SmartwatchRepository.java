@@ -1,9 +1,11 @@
 package com.repository;
 
 import com.model.Smartwatch;
+import com.util.Singleton;
 
 import java.util.*;
 
+@Singleton
 public class SmartwatchRepository implements CrudRepository<Smartwatch> {
 
     private final List<Smartwatch> smartwatchs;

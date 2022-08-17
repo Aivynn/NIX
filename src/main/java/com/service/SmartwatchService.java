@@ -6,6 +6,8 @@ import com.model.Phone;
 import com.model.Smartwatch;
 import com.repository.PhoneRepository;
 import com.repository.SmartwatchRepository;
+import com.util.Autowired;
+import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+@Singleton
 public class SmartwatchService extends ProductService<Smartwatch> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmartwatchService.class);
     private static final Random RANDOM = new Random();
@@ -20,6 +23,7 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     private static SmartwatchService instance;
 
+    @Autowired
     public SmartwatchService(SmartwatchRepository repository) {
         super(repository);
         this.repository = repository;
@@ -53,13 +57,11 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     @Override
     protected Smartwatch createProduct() {
-        return new Smartwatch(
-                Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
-                RANDOM.nextInt(500),
-                RANDOM.nextDouble(1000.0),
-                "Model-" + RANDOM.nextInt(10),
-                getRandomManufacturer()
-        );
+        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0),getRandomManufacturer())
+                .title(Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000))
+                .count(RANDOM.nextInt(500))
+                .model("Model-" + RANDOM.nextInt(10))
+                .build();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com;
+package com.util;
 
 import com.model.Product;
 import org.apache.commons.lang3.StringUtils;

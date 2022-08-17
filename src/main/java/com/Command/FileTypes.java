@@ -1,5 +1,5 @@
 package com.Command;
 
-public enum Files {
+public enum FileTypes {
     JSON,XML
 }
