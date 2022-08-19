@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Singleton
@@ -34,6 +35,7 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
+
     public boolean changePrice(String id) {
         return repository.findById(id).map(smartwatch -> {
             LOGGER.info("{}", smartwatch);
@@ -50,7 +52,7 @@ public class SmartwatchService extends ProductService<Smartwatch> {
     @Override
     protected Smartwatch createProduct() {
         System.out.println(this.hashCode());
-        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0),getRandomManufacturer())
+        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0), getRandomManufacturer())
                 .title(Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000))
                 .count(RANDOM.nextInt(500))
                 .model("Model-" + RANDOM.nextInt(10))
@@ -67,5 +69,13 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         smartwatch.setPrice(price);
         repository.update(smartwatch);
         LOGGER.info("Notebook {} has been deleted", smartwatch.getId());
+    }
+
+    public static Smartwatch createSmartwatch(Map<String, Object> x) {
+        return new Smartwatch.SmartwatchBuilder((Double) x.get("price"),
+                ((Manufacturer) x.get("manufacturer")))
+                .count((Integer) x.get("count"))
+                .title((String) x.get("title"))
+                .model((String) x.get("model")).build();
     }
 }

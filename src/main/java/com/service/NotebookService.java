@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Singleton
@@ -77,4 +78,15 @@ public class NotebookService extends ProductService<Notebook> {
             return false;
         });
     }
+
+    public static Notebook createNotebook(Map<String, Object> x){
+        return new Notebook((String) x.get("title"),
+                (Integer) x.get("count"),
+                (Double) x.get("price"),
+                (String) x.get("model"),
+                (Manufacturer) x.get("manufacturer"));
+
+    }
+
+
 }

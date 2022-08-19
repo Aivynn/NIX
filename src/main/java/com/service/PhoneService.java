@@ -89,4 +89,15 @@ public class PhoneService extends ProductService<Phone> {
                 .findAny();
 
     }
+
+    public static Phone createPhone(Map<String, Object> x){
+       return new Phone((String) x.get("title"),
+               (Integer) x.get("count"),
+               (Double) x.get("price"),
+               (String) x.get("model"),
+               (Manufacturer) x.get("manufacturer"),
+               (List<String>) x.get("details"),
+               new OperationSystem(11,"Android"), LocalDateTime.now());
+
+    }
 }

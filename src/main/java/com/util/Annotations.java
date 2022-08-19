@@ -20,9 +20,7 @@ public class Annotations {
         Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Singleton.class);
         for (Class<?> clazz : allClasses) {
             products.put(clazz.getSimpleName(), createBean(clazz));
-        }
-        System.out.println(products);
-    }
+        }}
 
     private Object createBean(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Constructor<?> constructor;
