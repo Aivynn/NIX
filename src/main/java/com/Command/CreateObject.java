@@ -49,7 +49,6 @@ public class CreateObject implements Command {
         }
         HashMap<String, String> map = reader.parserToProduct();
         Manufacturer manufacturer;
-        String date = "2022-07-25T18:58:23Z"; //2022-07-25T18:58:23Z
         LocalDateTime time = LocalDateTime.parse(map.get("created"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
         if (Objects.equals(map.get("manufacturer"), "SAMSUNG")) {
             manufacturer = Manufacturer.SAMSUNG;

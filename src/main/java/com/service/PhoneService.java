@@ -3,7 +3,6 @@ package com.service;
 import com.model.*;
 import com.repository.PhoneRepository;
 import com.util.Autowired;
-import com.util.Bean;
 import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

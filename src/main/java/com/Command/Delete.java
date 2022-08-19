@@ -8,11 +8,16 @@ import com.service.NotebookService;
 import com.service.PhoneService;
 import com.service.ProductService;
 import com.service.SmartwatchService;
+import com.util.Autowired;
 
 public class Delete implements Command {
-    private static final ProductService<Phone> PHONE_SERVICE = null;
-    private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
-    private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
+
+    @Autowired
+    private static ProductService<Phone> PHONE_SERVICE;
+    @Autowired
+    private static ProductService<Notebook> NOTEBOOK_SERVICE;
+    @Autowired
+    private static ProductService<Smartwatch> SMARTWATCH_SERVICE;
 
     @Override
     public void execute() {

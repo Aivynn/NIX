@@ -19,7 +19,7 @@ import java.util.Random;
 public class SmartwatchService extends ProductService<Smartwatch> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmartwatchService.class);
     private static final Random RANDOM = new Random();
-    private SmartwatchRepository repository;
+    private final SmartwatchRepository repository;
 
     private static SmartwatchService instance;
 
@@ -28,14 +28,6 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         super(repository);
         this.repository = repository;
     }
-
-    public static SmartwatchService getInstance() {
-        if (instance == null) {
-            instance = new SmartwatchService(SmartwatchRepository.getInstance());
-        }
-        return instance;
-    }
-
 
     private Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
@@ -57,6 +49,7 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     @Override
     protected Smartwatch createProduct() {
+        System.out.println(this.hashCode());
         return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0),getRandomManufacturer())
                 .title(Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000))
                 .count(RANDOM.nextInt(500))
