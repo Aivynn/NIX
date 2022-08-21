@@ -12,17 +12,17 @@ import java.util.*;
 
 public class Annotations {
 
-    private final Map<String, Object> products = new HashMap<>();
+    private static final Map<String, Object> products = new HashMap<>();
 
 
-    public void repositories() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+    public static void repositories() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         final Reflections reflections = new Reflections("com");
         Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Singleton.class);
         for (Class<?> clazz : allClasses) {
             products.put(clazz.getSimpleName(), createBean(clazz));
         }}
 
-    private Object createBean(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private static Object createBean(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Constructor<?> constructor;
         if (clazz.getConstructors().length > 0) {
             constructor = clazz.getConstructors()[0];
@@ -48,7 +48,7 @@ public class Annotations {
 
 
 
-    public void autowiredFields() throws IllegalAccessException {
+    public static void autowiredFields() throws IllegalAccessException {
         final Reflections reflections = new Reflections("com",new FieldAnnotationsScanner());
         Set<Field> allClasses = reflections.getFieldsAnnotatedWith(Autowired.class);
         for(Field field : allClasses) {

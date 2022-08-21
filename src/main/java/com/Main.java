@@ -21,9 +21,8 @@ import java.net.URISyntaxException;
 public class Main {
 
     public static void main(String[] args) throws IOException, URISyntaxException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
-        Annotations test = new Annotations();
-        test.repositories();
-        test.autowiredFields();
+        Annotations.repositories();
+        Annotations.autowiredFields();
         StartMenu.simpleMenu(Commands.values());
     }
 }
