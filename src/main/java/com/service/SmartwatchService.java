@@ -1,47 +1,37 @@
 package com.service;
 
 import com.model.Manufacturer;
-import com.model.Notebook;
-import com.model.Phone;
 import com.model.Smartwatch;
-import com.repository.PhoneRepository;
-import com.repository.SmartwatchRepository;
+import com.repository.JDBC.SmartwatchJDBCRepository;
 import com.util.Autowired;
 import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Random;
 
 @Singleton
 public class SmartwatchService extends ProductService<Smartwatch> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmartwatchService.class);
     private static final Random RANDOM = new Random();
-    private SmartwatchRepository repository;
+    private final SmartwatchJDBCRepository repository;
 
     private static SmartwatchService instance;
 
     @Autowired
-    public SmartwatchService(SmartwatchRepository repository) {
+    public SmartwatchService(SmartwatchJDBCRepository repository) {
         super(repository);
         this.repository = repository;
     }
-
-    public static SmartwatchService getInstance() {
-        if (instance == null) {
-            instance = new SmartwatchService(SmartwatchRepository.getInstance());
-        }
-        return instance;
-    }
-
 
     private Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
+
     public boolean changePrice(String id) {
         return repository.findById(id).map(smartwatch -> {
             LOGGER.info("{}", smartwatch);
@@ -57,12 +47,17 @@ public class SmartwatchService extends ProductService<Smartwatch> {
 
     @Override
     protected Smartwatch createProduct() {
-        return new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0),getRandomManufacturer())
+        Smartwatch smartwatch = new Smartwatch.SmartwatchBuilder(RANDOM.nextDouble(1000.0), getRandomManufacturer(), LocalDateTime.now())
                 .title(Smartwatch.class.getSimpleName() + "-" + RANDOM.nextInt(1000))
                 .count(RANDOM.nextInt(500))
                 .model("Model-" + RANDOM.nextInt(10))
                 .build();
+        repository.save(smartwatch);
+        return smartwatch;
+
+
     }
+
 
     @Override
     public Smartwatch createFromObject(Smartwatch smartwatch) {
@@ -74,5 +69,13 @@ public class SmartwatchService extends ProductService<Smartwatch> {
         smartwatch.setPrice(price);
         repository.update(smartwatch);
         LOGGER.info("Notebook {} has been deleted", smartwatch.getId());
+    }
+
+    public static Smartwatch createSmartwatch(Map<String, Object> x) {
+        return new Smartwatch.SmartwatchBuilder((Double) x.get("price"),
+                ((Manufacturer) x.get("manufacturer")), LocalDateTime.now())
+                .count((Integer) x.get("count"))
+                .title((String) x.get("title"))
+                .model((String) x.get("model")).build();
     }
 }

@@ -1,9 +1,7 @@
 package com.service;
 
-import com.model.Notebook;
 import com.model.Phone;
 import com.model.ProductType;
-import com.model.Smartwatch;
 import com.util.Autowired;
 
 import java.util.Random;
@@ -21,11 +19,11 @@ public class ProductFactory {
     private ProductFactory() {
     }
 
-    public static void createAndSave(ProductType type) {
+    public static void createAndSave(ProductType type, int count) {
         switch (type) {
-            case PHONE -> PHONE_SERVICE.createAndSaveProducts(1);
-            case NOTEBOOK -> NOTEBOOK_SERVICE.createAndSaveProducts(1);
-            case SMARTWATCH -> SMARTWATCH_SERVICE.createAndSaveProducts(1);
+            case PHONE -> PHONE_SERVICE.createAndSaveProducts(count);
+            case NOTEBOOK -> NOTEBOOK_SERVICE.createAndSaveProducts(count);
+            case SMARTWATCH -> SMARTWATCH_SERVICE.createAndSaveProducts(count);
             default -> throw new IllegalArgumentException("Unknown Product type: " + type);
         };
     }
