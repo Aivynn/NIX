@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.*;
+import com.repository.JDBC.PhoneJDBCRepository;
 import com.repository.PhoneRepository;
 import com.util.Autowired;
 import com.util.Singleton;
@@ -12,19 +13,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 @Singleton
 public class PhoneService extends ProductService<Phone> {
 
     private static final Random RANDOM = new Random();
 
-    private final PhoneRepository repository;
+    private final PhoneJDBCRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     private static PhoneService instance;
 
     @Autowired
-    public PhoneService(PhoneRepository repository) {
-        super(repository);
+    public PhoneService(PhoneJDBCRepository repository) {
+        super(new PhoneRepository());
         this.repository = repository;
 
     }
@@ -50,7 +52,7 @@ public class PhoneService extends ProductService<Phone> {
 
     @Override
     protected Phone createProduct() {
-        return new Phone(
+        Phone phone = new Phone(
                 Phone.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
                 RANDOM.nextInt(500),
                 RANDOM.nextDouble(1000.0),
@@ -58,9 +60,11 @@ public class PhoneService extends ProductService<Phone> {
                 getRandomManufacturer(),
                 Stream.of("foo", "bar")
                         .collect(Collectors.toList()),
-                new OperationSystem(11,"Android"),
+                new OperationSystem(11, "Android"),
                 LocalDateTime.now()
         );
+        repository.save(phone);
+        return phone;
     }
 
     @Override
@@ -99,5 +103,9 @@ public class PhoneService extends ProductService<Phone> {
                (List<String>) x.get("details"),
                new OperationSystem(11,"Android"), LocalDateTime.now());
 
+    }
+
+    public List<Phone> findProducts(int limit){
+        return repository.getAllWithLimit(limit);
     }
 }

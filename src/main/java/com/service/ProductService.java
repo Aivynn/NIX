@@ -16,13 +16,11 @@ import static com.model.ProductType.*;
 
 public abstract class ProductService<T extends Product> {
 
-    int i = 0;
     private final CrudRepository<T> repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     public ProductService(CrudRepository<T> repository) {
         this.repository = repository;
-        i++;
 
     }
 
@@ -41,6 +39,7 @@ public abstract class ProductService<T extends Product> {
     }
 
     protected abstract T createProduct();
+
 
     public void save(T product) {
         if (product.getCount() == 0) {

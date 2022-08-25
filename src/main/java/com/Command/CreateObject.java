@@ -3,7 +3,6 @@ package com.Command;
 import com.model.*;
 import com.service.NotebookService;
 import com.service.PhoneService;
-import com.service.ProductService;
 import com.service.SmartwatchService;
 import com.util.Autowired;
 import com.util.ReadFromXMLFIle;
@@ -79,7 +78,7 @@ public class CreateObject implements Command {
                     Stream.of("a", "b").toList(),
                     new OperationSystem((Integer.parseInt(map.get("version"))), map.get("designation")),
                     time));
-            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")), manufacturer)
+            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")), manufacturer, LocalDateTime.now())
                     .count(Integer.parseInt(map.get("count")))
                     .title(map.get("title"))
                     .model(map.get("model"))

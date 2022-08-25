@@ -1,12 +1,9 @@
 package com.Command;
 
-import com.model.Notebook;
 import com.model.Phone;
 import com.model.ProductType;
-import com.model.Smartwatch;
 import com.service.NotebookService;
 import com.service.PhoneService;
-import com.service.ProductService;
 import com.service.SmartwatchService;
 import com.util.Autowired;
 

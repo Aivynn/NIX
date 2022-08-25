@@ -2,16 +2,13 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Notebook;
-import com.model.Phone;
-import com.repository.CrudRepository;
+import com.repository.JDBC.NotebookJDBCRepository;
 import com.repository.NotebookRepository;
-import com.repository.PhoneRepository;
 import com.util.Autowired;
 import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -20,14 +17,13 @@ import java.util.Random;
 public class NotebookService extends ProductService<Notebook> {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotebookService.class);
     private static final Random RANDOM = new Random();
-    private NotebookRepository repository;
+    private final NotebookJDBCRepository repository = new NotebookJDBCRepository();
 
     private static NotebookService instance;
 
     @Autowired
     public NotebookService(NotebookRepository repository) {
         super(repository);
-        this.repository = repository;
 
     }
 
@@ -40,13 +36,15 @@ public class NotebookService extends ProductService<Notebook> {
 
     @Override
     protected Notebook createProduct() {
-        return new Notebook(
+        Notebook notebook = new Notebook(
                 Notebook.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
                 RANDOM.nextInt(500),
                 RANDOM.nextDouble(1000.0),
                 "Model-" + RANDOM.nextInt(10),
                 getRandomManufacturer()
         );
+        repository.save(notebook);
+        return notebook;
     }
 
     @Override
@@ -86,6 +84,10 @@ public class NotebookService extends ProductService<Notebook> {
                 (String) x.get("model"),
                 (Manufacturer) x.get("manufacturer"));
 
+    }
+
+    public List<Notebook> findProducts(int limit){
+        return repository.getAllWithLimit(limit);
     }
 
 
