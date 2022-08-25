@@ -6,6 +6,7 @@ import com.repository.JDBC.InvoiceJDBCRepository;
 import com.service.*;
 import com.util.Annotations;
 import com.util.Autowired;
+import com.util.TableCreator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -28,6 +29,7 @@ public class JDBCexamples {
     private final static InvoiceJDBCRepository repository = new InvoiceJDBCRepository();
 
     public static void main(String[] args) throws SQLException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        TableCreator.tableChecker();
         Annotations.repositories();
         Annotations.autowiredFields();
         int createdPhones = 3;
