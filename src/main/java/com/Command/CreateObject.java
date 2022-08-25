@@ -3,6 +3,7 @@ package com.Command;
 import com.model.*;
 import com.service.NotebookService;
 import com.service.PhoneService;
+import com.service.ProductService;
 import com.service.SmartwatchService;
 import com.util.Autowired;
 import com.util.ReadFromXMLFIle;
@@ -48,6 +49,7 @@ public class CreateObject implements Command {
         }
         HashMap<String, String> map = reader.parserToProduct();
         Manufacturer manufacturer;
+        String date = "2022-07-25T18:58:23Z"; //2022-07-25T18:58:23Z
         LocalDateTime time = LocalDateTime.parse(map.get("created"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
         if (Objects.equals(map.get("manufacturer"), "SAMSUNG")) {
             manufacturer = Manufacturer.SAMSUNG;
@@ -78,7 +80,7 @@ public class CreateObject implements Command {
                     Stream.of("a", "b").toList(),
                     new OperationSystem((Integer.parseInt(map.get("version"))), map.get("designation")),
                     time));
-            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")), manufacturer, LocalDateTime.now())
+            case SMARTWATCH -> SMARTWATCH_SERVICE.save(new Smartwatch.SmartwatchBuilder(Double.parseDouble(map.get("price").replaceAll("[^0-9?!\\.]", "")), manufacturer)
                     .count(Integer.parseInt(map.get("count")))
                     .title(map.get("title"))
                     .model(map.get("model"))

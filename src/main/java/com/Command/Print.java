@@ -1,20 +1,19 @@
 package com.Command;
 
+import com.model.Notebook;
 import com.model.Phone;
 import com.model.ProductType;
+import com.model.Smartwatch;
 import com.service.NotebookService;
 import com.service.PhoneService;
+import com.service.ProductService;
 import com.service.SmartwatchService;
-import com.util.Autowired;
 
 
 public class Print implements Command{
-    @Autowired
-    private static  PhoneService PHONE_SERVICE;
-    @Autowired
-    private static NotebookService NOTEBOOK_SERVICE;
-    @Autowired
-    private static  SmartwatchService SMARTWATCH_SERVICE;
+    private static final ProductService<Phone> PHONE_SERVICE = null;
+    private static final ProductService<Notebook> NOTEBOOK_SERVICE = NotebookService.getInstance();
+    private static final ProductService<Smartwatch> SMARTWATCH_SERVICE = SmartwatchService.getInstance();
     @Override
     public void execute() {
         System.out.println("What do you want to print? ");

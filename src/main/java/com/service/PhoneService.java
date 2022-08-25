@@ -1,9 +1,9 @@
 package com.service;
 
 import com.model.*;
-import com.repository.JDBC.PhoneJDBCRepository;
 import com.repository.PhoneRepository;
 import com.util.Autowired;
+import com.util.Bean;
 import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +13,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 @Singleton
 public class PhoneService extends ProductService<Phone> {
 
     private static final Random RANDOM = new Random();
 
-    private final PhoneJDBCRepository repository;
+    private final PhoneRepository repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     private static PhoneService instance;
 
     @Autowired
-    public PhoneService(PhoneJDBCRepository repository) {
-        super(new PhoneRepository());
+    public PhoneService(PhoneRepository repository) {
+        super(repository);
         this.repository = repository;
 
     }
@@ -52,7 +51,7 @@ public class PhoneService extends ProductService<Phone> {
 
     @Override
     protected Phone createProduct() {
-        Phone phone = new Phone(
+        return new Phone(
                 Phone.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
                 RANDOM.nextInt(500),
                 RANDOM.nextDouble(1000.0),
@@ -60,11 +59,9 @@ public class PhoneService extends ProductService<Phone> {
                 getRandomManufacturer(),
                 Stream.of("foo", "bar")
                         .collect(Collectors.toList()),
-                new OperationSystem(11, "Android"),
+                new OperationSystem(11,"Android"),
                 LocalDateTime.now()
         );
-        repository.save(phone);
-        return phone;
     }
 
     @Override
@@ -92,20 +89,5 @@ public class PhoneService extends ProductService<Phone> {
                 .flatMap(phone -> phone.getDetails().stream().map(s -> Objects.equals(s, detail)))
                 .findAny();
 
-    }
-
-    public static Phone createPhone(Map<String, Object> x){
-       return new Phone((String) x.get("title"),
-               (Integer) x.get("count"),
-               (Double) x.get("price"),
-               (String) x.get("model"),
-               (Manufacturer) x.get("manufacturer"),
-               (List<String>) x.get("details"),
-               new OperationSystem(11,"Android"), LocalDateTime.now());
-
-    }
-
-    public List<Phone> findProducts(int limit){
-        return repository.getAllWithLimit(limit);
     }
 }

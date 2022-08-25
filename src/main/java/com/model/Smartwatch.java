@@ -2,8 +2,6 @@ package com.model;
 
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.UUID;
 
 @Getter
@@ -12,13 +10,10 @@ public class Smartwatch extends Product {
     private final String model;
     private final Manufacturer manufacturer;
 
-    protected LocalDateTime date;
-
     private Smartwatch(SmartwatchBuilder smartwatchBuilder) {
-        super(smartwatchBuilder.title, smartwatchBuilder.count, smartwatchBuilder.price, smartwatchBuilder.type);
+        super(smartwatchBuilder.title,smartwatchBuilder.count,smartwatchBuilder.price,smartwatchBuilder.type);
         this.model = smartwatchBuilder.model;
         this.manufacturer = smartwatchBuilder.manufacturer;
-        this.date = smartwatchBuilder.date;
     }
 
     @Override
@@ -44,24 +39,14 @@ public class Smartwatch extends Product {
         private Manufacturer manufacturer;
         protected ProductType type;
 
-        protected LocalDateTime date;
-
-
         public SmartwatchBuilder model(String model) {
             this.model = model;
             return this;
         }
-
-        public SmartwatchBuilder(Double price, Manufacturer manufacturer,LocalDateTime date) {
+        public SmartwatchBuilder(Double price, Manufacturer manufacturer) {
             this.id = UUID.randomUUID().toString();
             this.price = price;
             this.manufacturer = manufacturer;
-            type = ProductType.SMARTWATCH;
-            this.date = date;
-        }
-        public SmartwatchBuilder date(LocalDateTime date){
-            this.date = date;
-            return this;
         }
 
         public SmartwatchBuilder count(Integer count) {
@@ -75,13 +60,13 @@ public class Smartwatch extends Product {
         }
 
         private void validateSmartwatch(Smartwatch smartwatch) {
-            if (smartwatch.count != null) {
-                if (smartwatch.count <= 0) {
+            if(smartwatch.count != null) {
+                if(smartwatch.count <= 0) {
                     throw new IllegalArgumentException("Count can't be 0 or less then 0, try again");
                 }
             }
-            if (smartwatch.title != null) {
-                if (smartwatch.title.length() > 20) {
+            if(smartwatch.title != null) {
+                if(smartwatch.title.length() > 20) {
                     throw new IllegalArgumentException("Title can't be larger then 20 symbols, try again");
                 }
             }

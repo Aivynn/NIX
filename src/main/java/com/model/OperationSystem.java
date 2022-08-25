@@ -1,8 +1,5 @@
 package com.model;
 
-import lombok.Getter;
-
-@Getter
 public class OperationSystem {
 
     private int version;

@@ -2,28 +2,31 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Notebook;
-import com.repository.JDBC.NotebookJDBCRepository;
+import com.model.Phone;
+import com.repository.CrudRepository;
 import com.repository.NotebookRepository;
+import com.repository.PhoneRepository;
 import com.util.Autowired;
 import com.util.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @Singleton
 public class NotebookService extends ProductService<Notebook> {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotebookService.class);
     private static final Random RANDOM = new Random();
-    private final NotebookJDBCRepository repository = new NotebookJDBCRepository();
+    private NotebookRepository repository;
 
     private static NotebookService instance;
 
     @Autowired
     public NotebookService(NotebookRepository repository) {
         super(repository);
+        this.repository = repository;
 
     }
 
@@ -36,15 +39,13 @@ public class NotebookService extends ProductService<Notebook> {
 
     @Override
     protected Notebook createProduct() {
-        Notebook notebook = new Notebook(
+        return new Notebook(
                 Notebook.class.getSimpleName() + "-" + RANDOM.nextInt(1000),
                 RANDOM.nextInt(500),
                 RANDOM.nextDouble(1000.0),
                 "Model-" + RANDOM.nextInt(10),
                 getRandomManufacturer()
         );
-        repository.save(notebook);
-        return notebook;
     }
 
     @Override
@@ -76,19 +77,4 @@ public class NotebookService extends ProductService<Notebook> {
             return false;
         });
     }
-
-    public static Notebook createNotebook(Map<String, Object> x){
-        return new Notebook((String) x.get("title"),
-                (Integer) x.get("count"),
-                (Double) x.get("price"),
-                (String) x.get("model"),
-                (Manufacturer) x.get("manufacturer"));
-
-    }
-
-    public List<Notebook> findProducts(int limit){
-        return repository.getAllWithLimit(limit);
-    }
-
-
 }

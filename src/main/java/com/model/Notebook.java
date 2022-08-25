@@ -22,7 +22,6 @@ public class Notebook extends Product {
         super(title, count, price,ProductType.NOTEBOOK);
         this.model = model;
         this.manufacturer = manufacturer;
-        date = LocalDateTime.now();
     }
 
     @Override
