@@ -14,7 +14,7 @@ public class Create implements Command{
         final ProductType[] values = ProductType.values();
         final List<String> names = getNamesOfType(values);
         final int userInput = UserInputUtil.getUserInput(names);
-        ProductFactory.createAndSave(values[userInput]);
+        ProductFactory.createAndSave(values[userInput],1);
 
     }
 

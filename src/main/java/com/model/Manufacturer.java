@@ -1,5 +1,5 @@
 package com.model;
 
 public enum Manufacturer {
-    SONY, SAMSUNG, APPLE
+    SONY, SAMSUNG, APPLE,NONE
 }

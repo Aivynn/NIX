@@ -16,13 +16,11 @@ import static com.model.ProductType.*;
 
 public abstract class ProductService<T extends Product> {
 
-    int i = 0;
     private final CrudRepository<T> repository;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneService.class);
 
     public ProductService(CrudRepository<T> repository) {
         this.repository = repository;
-        i++;
 
     }
 
@@ -41,6 +39,7 @@ public abstract class ProductService<T extends Product> {
     }
 
     protected abstract T createProduct();
+
 
     public void save(T product) {
         if (product.getCount() == 0) {
@@ -118,16 +117,13 @@ public abstract class ProductService<T extends Product> {
 
     public Function<Map<String, Object>, ? extends Product> createObject = x -> {
         if (x.get("type") == PHONE) {
-            return new Phone((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"), (List<String>) x.get("details"), new OperationSystem(11,"Android"), LocalDateTime.now());
+            return PhoneService.createPhone(x);
         }
         if (x.get("type") == NOTEBOOK) {
-            return new Notebook((String) x.get("title"), (Integer) x.get("count"), (Double) x.get("price"), (String) x.get("model"), (Manufacturer) x.get("manufacturer"));
+            return NotebookService.createNotebook(x);
         }
         if (x.get("type") == SMARTWATCH) {
-            return  new Smartwatch.SmartwatchBuilder((Double) x.get("price"),((Manufacturer) x.get("manufacturer")))
-                    .count((Integer) x.get("count"))
-                    .title((String) x.get("title"))
-                    .model((String) x.get("model")).build();
+            return SmartwatchService.createSmartwatch(x);
         }
         throw new IllegalArgumentException("No such type, try again");
     };
