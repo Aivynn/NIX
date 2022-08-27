@@ -3,10 +3,12 @@ package com.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 
 @Getter

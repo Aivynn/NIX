@@ -51,6 +51,7 @@ public class JDBCexamples {
                 .sum(sum(products))
                 .build();
         repository.save(invoice);
+        repository.findbyId("432652c6-8ac6-4604-830e-bafc01a389f3");
 
 
 
