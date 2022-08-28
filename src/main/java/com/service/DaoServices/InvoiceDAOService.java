@@ -1,27 +1,22 @@
-package com.service;
+package com.service.DaoServices;
 
 import com.model.DAO.InvoiceDAO;
-import com.model.Invoice;
-import com.repository.JDBC.InvoiceJDBCRepository;
 import com.repository.hibernate.InvoiceDaoRepository;
 import com.util.Autowired;
-import com.util.Singleton;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Singleton
-public class InvoiceService {
-
+public class InvoiceDAOService {
     InvoiceDaoRepository repository;
 
     @Autowired
-    public InvoiceService(InvoiceDaoRepository invoiceDaoCRepository){
-        this.repository = invoiceDaoCRepository;
+    public InvoiceDAOService(InvoiceDaoRepository invoiceDaoRepository){
+        this.repository = invoiceDaoRepository;
     }
 
     public InvoiceDAO findById(String id){
-       return repository.getById(id);
+        return repository.getById(id);
     }
 
     public void createAndSave(InvoiceDAO invoice) throws SQLException {
@@ -44,5 +39,4 @@ public class InvoiceService {
     public void groupBySum() {
         repository.groupBySum();
     }
-
 }

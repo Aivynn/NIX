@@ -18,7 +18,7 @@ public class InvoiceDAO {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
-    private double sum;
+    private double averageSum;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -36,7 +36,7 @@ public class InvoiceDAO {
     private InvoiceDAO(InvoiceBuilder invoiceBuilder) {
         this.product = invoiceBuilder.products;
         id = invoiceBuilder.id;
-        this.sum = invoiceBuilder.sum;
+        this.averageSum = invoiceBuilder.sum;
         this.time = invoiceBuilder.time;
 
     }
@@ -80,7 +80,7 @@ public class InvoiceDAO {
     public String toString() {
         return "Invoice{" +
                 "id='" + id + '\'' + "\n" +
-                "sum=" + sum + "\n" +
+                "sum=" + averageSum + "\n" +
                 //"products=" + products + "\n" +
                 "time=" + time +
                 '}';

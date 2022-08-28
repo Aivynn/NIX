@@ -1,6 +1,7 @@
 package com.repository.hibernate;
 
 import com.config.HibernateSessionFactoryUtil;
+import com.model.DAO.NotebookDAO;
 import com.model.DAO.PhoneDAO;
 import com.util.Singleton;
 import org.hibernate.Session;
@@ -11,12 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Singleton
-public class PhoneDaoRepository implements CrudRepositoryDAO<PhoneDAO> {
+public class NotebookDaoRepository implements CrudRepositoryDAO<NotebookDAO> {
     private final SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
     private final Session session = sessionFactory.openSession();
 
     @Override
-    public void save(PhoneDAO product) {
+    public void save(NotebookDAO product) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(product);
@@ -27,7 +28,7 @@ public class PhoneDaoRepository implements CrudRepositoryDAO<PhoneDAO> {
     @Override
     public void update(String id) {
         session.getTransaction().begin();
-        Query query = session.createQuery("update PhoneDAO phone set phone.time=:t where phone.id=:i");
+        Query query = session.createQuery("update NotebookDAO notebook set notebook.time=:t where notebook.id=:i");
         query.setParameter("t", LocalDateTime.now());
         query.setParameter("i", id);
         int status = query.executeUpdate();
@@ -42,7 +43,7 @@ public class PhoneDaoRepository implements CrudRepositoryDAO<PhoneDAO> {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.getTransaction().begin();
-        Query query = session.createQuery("delete PhoneDAO where id=:i");
+        Query query = session.createQuery("delete NotebookDAO where id=:i");
         query.setParameter("i", id);
         session.getTransaction().commit();
         session.close();
@@ -50,26 +51,24 @@ public class PhoneDaoRepository implements CrudRepositoryDAO<PhoneDAO> {
     }
 
     @Override
-    public PhoneDAO getById(String id) {
+    public NotebookDAO getById(String id) {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
-        Query query = session.createQuery("from PhoneDAO where id =: i");
+        Query query = session.createQuery("from NotebookDAO where id =: i");
         query.setParameter("i", id);
-        List<PhoneDAO> phoneDAOS = query.list();
-        return phoneDAOS.get(0);
+        List<NotebookDAO> NotebookDAOS = query.list();
+        return NotebookDAOS.get(0);
 
     }
 
     @Override
-    public void saveAll(List<PhoneDAO> products) {
+    public void saveAll(List<NotebookDAO> products) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        for(PhoneDAO phoneDAO : products) {
-            session.save(phoneDAO);
-        }
+        for(NotebookDAO notebookDAO : products) {
+            session.save(notebookDAO);
+        };
         session.getTransaction().commit();
         session.close();
     }
-
-
 }
