@@ -13,36 +13,36 @@ import java.util.List;
 @Singleton
 public class InvoiceService {
 
-    InvoiceDaoRepository repository;
+    InvoiceJDBCRepository repository;
 
     @Autowired
-    public InvoiceService(InvoiceDaoRepository invoiceDaoCRepository){
+    public InvoiceService(InvoiceJDBCRepository invoiceDaoCRepository){
         this.repository = invoiceDaoCRepository;
     }
 
-    public InvoiceDAO findById(String id){
-       return repository.getById(id);
+    public Invoice findById(String id){
+       return repository.findbyId(id);
     }
 
-    public void createAndSave(InvoiceDAO invoice) throws SQLException {
+    public void createAndSave(Invoice invoice) throws SQLException {
         repository.save(invoice);
     }
 
-    public Long getCount(){
+    public int getCount(){
         return repository.countRows();
     }
 
     public void updateToCurrentTime(String id){
-        repository.updateTime(id);
+        repository.update(id);
     }
 
-    public List<InvoiceDAO> getInvoicesExpensiveThen(double sum){
-        List<InvoiceDAO> invoiceList = repository.findBySum(sum);
+    public List<Invoice> getInvoicesExpensiveThen(double sum){
+        List<Invoice> invoiceList = repository.findBySum(sum);
         return invoiceList;
     }
 
     public void groupBySum() {
-        repository.groupBySum();
+        repository.GroupBySum();
     }
 
 }
