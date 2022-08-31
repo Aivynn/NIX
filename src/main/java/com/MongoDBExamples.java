@@ -37,17 +37,17 @@ public class MongoDBExamples {
         products.addAll(phones);
         products.addAll(notebooks);
         products.addAll(smartwatches);
-        InvoiceMongo invoiceDAO = new InvoiceMongo.InvoiceBuilder()
+        InvoiceMongo invoiceMongo = new InvoiceMongo.InvoiceBuilder()
                 .sum(getAverageSum(products))
                 .time(LocalDateTime.now())
                 .products(products)
                 .build();
         String id = "630f656f024a9d72a656d078";
-        INVOICE_SERVICE.createAndSave(invoiceDAO);
+        INVOICE_SERVICE.createAndSave(invoiceMongo);
         INVOICE_SERVICE.findBySum(2000);
         INVOICE_SERVICE.groupBySum();
         INVOICE_SERVICE.countDocuments();
-        INVOICE_SERVICE.updateTime(id);
+        //INVOICE_SERVICE.updateTime(id);
     }
 
     private static Double getAverageSum(List<Product> products) {
