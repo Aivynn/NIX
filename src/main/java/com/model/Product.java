@@ -21,4 +21,15 @@ public abstract class Product {
         this.price = price;
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", count=" + count +
+                ", price=" + price +
+                ", type=" + type +
+                '}';
+    }
 }

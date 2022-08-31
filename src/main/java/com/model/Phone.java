@@ -17,6 +17,13 @@ public class Phone extends Product{
 
     private OperationSystem operationSystem;
 
+    public Phone(){
+        super("123213",41,4444.34,ProductType.PHONE);
+        this.model = "123123";
+        this.manufacturer = Manufacturer.APPLE;
+
+    }
+
     public Phone(String title, int count, double price, String model, Manufacturer manufacturer,List<String> details,OperationSystem operationSystem,LocalDateTime date) {
         super(title, count, price,ProductType.PHONE);
         this.model = model;
