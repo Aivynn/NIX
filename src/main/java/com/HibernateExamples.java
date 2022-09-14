@@ -30,6 +30,7 @@ public class HibernateExamples {
 
 
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, SQLException {
+
         Annotations.repositories();
         Annotations.autowiredFields();
         List<PhoneDAO> phones = PHONE_SERVICE.createAndSaveProducts(3);

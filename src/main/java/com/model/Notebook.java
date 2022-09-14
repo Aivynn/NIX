@@ -17,6 +17,13 @@ public class Notebook extends Product {
 
     private OperationSystem operationSystem;
 
+    public Notebook(){
+        super("123213",41,4444.34,ProductType.NOTEBOOK);
+        this.model = "123123";
+        this.manufacturer = Manufacturer.APPLE;
+
+    }
+
 
     public Notebook(String title, int count, double price, String model, Manufacturer manufacturer) {
         super(title, count, price,ProductType.NOTEBOOK);

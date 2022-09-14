@@ -14,6 +14,13 @@ public class Smartwatch extends Product {
 
     protected LocalDateTime date;
 
+    public Smartwatch(){
+        super("123213",41,4444.34,ProductType.NOTEBOOK);
+        this.model = "123123";
+        this.manufacturer = Manufacturer.APPLE;
+
+    }
+
     private Smartwatch(SmartwatchBuilder smartwatchBuilder) {
         super(smartwatchBuilder.title, smartwatchBuilder.count, smartwatchBuilder.price, smartwatchBuilder.type);
         this.model = smartwatchBuilder.model;
