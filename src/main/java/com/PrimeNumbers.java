@@ -9,13 +9,13 @@ public class PrimeNumbers {
         for(int i = 0;i<100;i++) {
             numbers.add(i);
         }
-        List<Integer> primeNumbers = simpleNumbersManufacturer(numbers);
+        List<Integer> primeNumbers = primeNumbersManufacturer(numbers);
         Thread.sleep(100);
         System.out.println(primeNumbers);
     }
 
 
-    public static List<Integer> simpleNumbersManufacturer(List<Integer> numbers) throws InterruptedException {
+    public static List<Integer> primeNumbersManufacturer(List<Integer> numbers) throws InterruptedException {
         List<Integer> primeNumbers = new ArrayList<>();
         Thread thread1 = new Thread(() -> numbers.stream()
                 .limit(numbers.size()/2)
