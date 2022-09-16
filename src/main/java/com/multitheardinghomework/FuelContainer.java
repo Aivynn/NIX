@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-public class Buffer {
+public class FuelContainer {
     private AtomicInteger value = new AtomicInteger(0);
 
     public void setValue(Integer number){

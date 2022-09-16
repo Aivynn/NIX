@@ -1,19 +1,17 @@
 package com.multitheardinghomework;
 
-import lombok.Getter;
-
 import java.util.Random;
 import java.util.concurrent.*;
 
-public class MultiThreadingHomework {
+public class RoboFactory {
 
-    private static MultiThreadingHomework instance;
+    private static RoboFactory instance;
 
-    public static MultiThreadingHomework getInstanceUsingDoubleLocking(){
+    public static RoboFactory getInstanceUsingDoubleLocking(){
         if(instance == null){
-            synchronized (MultiThreadingHomework.class) {
+            synchronized (RoboFactory.class) {
                 if(instance == null){
-                    instance = new MultiThreadingHomework();
+                    instance = new RoboFactory();
                 }
             }
         }
@@ -36,8 +34,7 @@ public class MultiThreadingHomework {
     private static final Random random = new Random();
 
     public static void main(String[] args) throws Exception {
-        Buffer buffer = new Buffer();
-        MultiThreadingHomework multiThreadingHomework = new MultiThreadingHomework();
+        FuelContainer buffer = new FuelContainer();
         CountDownLatch latch = new CountDownLatch(2);
         CountDownLatch robotFiveLatch = new CountDownLatch(1);
         ExecutorService pool = Executors.newFixedThreadPool(5);

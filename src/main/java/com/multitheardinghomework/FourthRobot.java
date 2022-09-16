@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class FourthRobot  implements Callable<Boolean> {
 
-    private static final MultiThreadingHomework multiThreadingHomework = MultiThreadingHomework.getInstanceUsingDoubleLocking();
+    private static final RoboFactory roboFactory = RoboFactory.getInstanceUsingDoubleLocking();
 
         private final CountDownLatch s;
         private final CountDownLatch robotFiveLatch;
@@ -21,7 +21,7 @@ public class FourthRobot  implements Callable<Boolean> {
             s.await();
             int production = 0;
             boolean flag = false;
-            Random random = multiThreadingHomework.getRandom();
+            Random random = roboFactory.getRandom();
             while (!flag) {
                 production += random.nextInt(25, 35);
                 if (random.nextInt(1, 100) < 30) {

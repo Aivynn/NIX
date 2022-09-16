@@ -7,13 +7,13 @@ import java.util.Random;
 
 public class FirstRobot implements Runnable {
 
-    private static final MultiThreadingHomework multiThreadingHomework = MultiThreadingHomework.getInstanceUsingDoubleLocking();
+    private static final RoboFactory roboFactory = RoboFactory.getInstanceUsingDoubleLocking();
 
     private Integer value = 0;
 
-    private final Buffer buffer;
+    private final FuelContainer buffer;
 
-    FirstRobot(Buffer buffer) {
+    FirstRobot(FuelContainer buffer) {
         this.buffer = buffer;
     }
 
@@ -21,8 +21,8 @@ public class FirstRobot implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        Random random = multiThreadingHomework.getRandom();
-        while (multiThreadingHomework.getFlag()) {
+        Random random = roboFactory.getRandom();
+        while (roboFactory.getFlag()) {
             value = random.nextInt(500, 1000);
             System.out.println("Robot1 delivered " + value + " fuel ");
             buffer.setValue(value);

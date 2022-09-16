@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SecondAndThirdRobot implements Callable<Boolean> {
 
-    private static final MultiThreadingHomework multiThreadingHomework = MultiThreadingHomework.getInstanceUsingDoubleLocking();
+    private static final RoboFactory roboFactory = RoboFactory.getInstanceUsingDoubleLocking();
 
         private static CountDownLatch s;
 
@@ -20,7 +20,7 @@ public class SecondAndThirdRobot implements Callable<Boolean> {
 
         @Override
         public Boolean call() throws Exception {
-            Random random = multiThreadingHomework.getRandom();
+            Random random = roboFactory.getRandom();
             while (production.get() < 100) {
                 int job = random.nextInt(10, 20);
                 production.set(production.get() + job);

@@ -6,13 +6,13 @@ import java.util.concurrent.CountDownLatch;
 
 public class FifthRobot implements Callable<Boolean> {
 
-    private static final MultiThreadingHomework multiThreadingHomework = MultiThreadingHomework.getInstanceUsingDoubleLocking();
+    private static final RoboFactory roboFactory = RoboFactory.getInstanceUsingDoubleLocking();
 
-    private final Buffer buffer;
+    private final FuelContainer buffer;
 
     private final CountDownLatch s;
 
-    FifthRobot(CountDownLatch s, Buffer buffer) {
+    FifthRobot(CountDownLatch s, FuelContainer buffer) {
         this.s = s;
         this.buffer = buffer;
     }
@@ -20,9 +20,9 @@ public class FifthRobot implements Callable<Boolean> {
     @Override
     public Boolean call() throws Exception {
         s.await();
-        Random random = multiThreadingHomework.getRandom();
+        Random random = roboFactory.getRandom();
         int job = 0;
-        while (multiThreadingHomework.getFlag()) {
+        while (roboFactory.getFlag()) {
             Thread.sleep(1000);
             int value = buffer.getValue().get();
             int requiredGas = random.nextInt(350, 700);
@@ -33,7 +33,7 @@ public class FifthRobot implements Callable<Boolean> {
             }
             job += 10;
             if (job == 100) {
-                multiThreadingHomework.setFlag(false);
+                roboFactory.setFlag(false);
             }
         }
         System.out.println("Robot 5 have finished his work");
