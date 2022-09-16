@@ -25,9 +25,9 @@ public class FifthRobot implements Callable<Boolean> {
         while (roboFactory.getFlag()) {
             Thread.sleep(1000);
             int value = buffer.getValue().get();
-            int requiredGas = random.nextInt(350, 700);
-            buffer.setValue(-requiredGas);
-            if (value < requiredGas) {
+            int requiredFuel = random.nextInt(350, 700);
+            buffer.setValue(-requiredFuel);
+            if (value < requiredFuel) {
                 System.out.println("Not enough fuel, waiting for another supply  ");
                 continue;
             }
