@@ -3,6 +3,7 @@ package com.service;
 import com.model.Manufacturer;
 import com.model.OperationSystem;
 import com.model.Phone;
+import com.repository.JDBC.PhoneJDBCRepository;
 import com.repository.PhoneRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +27,12 @@ class PhoneServiceTest {
     final Phone phone = new Phone("Title", 100, 1000.0, "Model", Manufacturer.APPLE, list, new OperationSystem(11, "Android"),
             LocalDateTime.now());
     private PhoneService target;
-    private PhoneRepository repository;
+    private PhoneJDBCRepository repository;
 
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(PhoneRepository.class);
+        repository = Mockito.mock(PhoneJDBCRepository.class);
         target = new PhoneService(repository);
     }
 

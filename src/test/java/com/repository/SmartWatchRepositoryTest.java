@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 class SmartwatchRepositoryTest {
@@ -18,7 +19,7 @@ class SmartwatchRepositoryTest {
     void setUp() {
         final Random random = new Random();
         target = new SmartwatchRepository();
-        smartwatch = new Smartwatch.SmartwatchBuilder((double) random.nextInt(1000),Manufacturer.APPLE)
+        smartwatch = new Smartwatch.SmartwatchBuilder((double) random.nextInt(1000),Manufacturer.APPLE,LocalDateTime.now())
                 .title("Title-" + random.nextInt(1000))
                 .count(random.nextInt(500))
                 .model("Model-" + random.nextInt(10))
@@ -57,7 +58,7 @@ class SmartwatchRepositoryTest {
 
     @Test
     void saveAll_manySmartwatchs() {
-        final Smartwatch otherSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
+        final Smartwatch otherSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE,LocalDateTime.now())
                 .count(500)
                 .model( "Model")
                 .title("title")
@@ -106,7 +107,7 @@ class SmartwatchRepositoryTest {
     @Test
     void update_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE,LocalDateTime.now())
                 .count(500)
                 .model( "Model")
                 .title("title")
@@ -132,7 +133,7 @@ class SmartwatchRepositoryTest {
     @Test
     void delete_noSmartwatch() {
         target.save(smartwatch);
-        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
+        final Smartwatch noSmartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE, LocalDateTime.now())
                 .count(500)
                 .model( "Model")
                 .title("title")

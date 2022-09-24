@@ -23,7 +23,6 @@ public class FifthRobot implements Callable<Boolean> {
         Random random = roboFactory.getRandom();
         int job = 0;
         while (roboFactory.getFlag()) {
-            Thread.sleep(1000);
             int value = buffer.getValue().get();
             int requiredFuel = random.nextInt(350, 700);
             buffer.setValue(-requiredFuel);
