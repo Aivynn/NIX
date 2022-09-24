@@ -15,6 +15,15 @@ import java.util.*;
 @WebServlet(value = "/")
 public class MainServlet extends HttpServlet {
     public static final List<String> users = new ArrayList<>();
+    private static MainServlet instance;
+
+
+    public static MainServlet getInstance() {
+        if (instance == null) {
+            instance = new MainServlet();
+        }
+        return instance;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
