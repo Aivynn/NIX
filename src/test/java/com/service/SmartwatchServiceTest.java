@@ -2,6 +2,7 @@ package com.service;
 
 import com.model.Manufacturer;
 import com.model.Smartwatch;
+import com.repository.JDBC.SmartwatchJDBCRepository;
 import com.repository.SmartwatchRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;;
 
@@ -17,17 +19,17 @@ import static org.mockito.Mockito.*;
 
 class SmartwatchServiceTest {
 
-    private final static Smartwatch smartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE)
+    private final static Smartwatch smartwatch = new Smartwatch.SmartwatchBuilder(1000.0,Manufacturer.APPLE, LocalDateTime.now())
             .count(500)
             .model( "Model")
             .title("title")
             .build();
     private SmartwatchService target;
-    private SmartwatchRepository repository;
+    private SmartwatchJDBCRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = mock(SmartwatchRepository.class);
+        repository = mock(SmartwatchJDBCRepository.class);
         target = new SmartwatchService(repository);
     }
 
